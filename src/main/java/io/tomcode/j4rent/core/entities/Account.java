@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -15,7 +17,7 @@ import java.util.Date;
 @Entity(name = "Account")
 @Table(name = "Account")
 public class Account extends BaseEntity {
-    @Column(name = "user_name", nullable = false, unique = true, updatable = false, length = 50)
+    @Column(name = "username", nullable = false, unique = true, updatable = false, length = 50)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -44,9 +46,4 @@ public class Account extends BaseEntity {
 
     @Column(name = "is_verify", columnDefinition = "BOOL DEFAULT false")
     private boolean isVerify;
-
-    // Foreign key
-    @ManyToOne
-    @JoinColumn(name = "privileges_id", nullable = false)
-    private  Privilege privileges_id;
 }
