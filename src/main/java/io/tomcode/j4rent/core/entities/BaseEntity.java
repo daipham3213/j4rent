@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class BaseEntity<Auditor> {
+public abstract class BaseEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -27,12 +27,12 @@ public abstract class BaseEntity<Auditor> {
                     )
             }
     )
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(name = "remarks")
     private String remarks;
 
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
@@ -42,11 +42,11 @@ public abstract class BaseEntity<Auditor> {
     @LastModifiedDate
     private Date modifiedDate;
 
-    @Column(name = "created_by")
+    @Column(name = "created_by_id")
     @CreatedBy
-    private Auditor createdBy;
+    private UUID createdById;
 
-    @Column(name = "modified_by")
+    @Column(name = "modified_by_id")
     @LastModifiedBy
-    private Auditor modifiedBy;
+    private UUID modifiedById;
 }

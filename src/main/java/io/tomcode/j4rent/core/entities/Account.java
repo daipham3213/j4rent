@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity(name = "Account")
-@Table(name = "Account")
+@Table(name = "account")
 public class Account extends BaseEntity {
     @Column(name = "username", nullable = false, unique = true, updatable = false, length = 50)
     private String username;
@@ -46,4 +46,7 @@ public class Account extends BaseEntity {
 
     @Column(name = "is_verify", columnDefinition = "BOOL DEFAULT false")
     private boolean isVerify;
+
+    @Column(name = "is_admin", columnDefinition = "BOOL DEFAULT false")
+    private boolean isAdmin;
 }

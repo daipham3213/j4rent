@@ -1,9 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
@@ -11,12 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@EqualsAndHashCode
-@Data //Set -Get
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Status")
-@Table(name = "Status")
+@Table(name = "status")
+@Getter
+@Setter
 public class Status extends BaseEntity {
     @Column( name = "name")
     private String name;
@@ -24,10 +21,9 @@ public class Status extends BaseEntity {
     // Foreign key
     @ManyToOne
     @JoinColumn(name = "parent_n_id")
-    private Status parent_n_id;
+    private Status parentN;
 
     //Reference
-    @OneToMany(mappedBy = "status_id",cascade = CascadeType.ALL)
-    Set<Workflow> workflows=new HashSet<>();
-
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    private Set<Workflow> workflows = new HashSet<>();
 }

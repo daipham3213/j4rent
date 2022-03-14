@@ -1,43 +1,37 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.AbstractAuditable;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
-@Data //Set -Get
+
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "message")
+@Entity(name = "Message")
 @Table(name = "message")
-public class Message  extends BaseEntity{
-
-        @Column(name = "Message")
+@Getter
+@Setter
+public class Message extends BaseEntity {
+    @Column(name = "message")
     private String message;
-    // Foreign key
+
     @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false)
-    private  Conversation conversation;
+    private Conversation conversation;
+
     @ManyToOne
     @JoinColumn(name = "sender", nullable = false)
-    private  Account sender;
+    private Account sender;
+
     @ManyToOne
     @JoinColumn(name = "reply_to")
-    private  Message reply_to;
-    //Reference
-    @OneToMany(mappedBy = "message_id",cascade = CascadeType.ALL)
-    Set<Attachment>Attachment = new HashSet<>();
+    private Message replyTo;
 
-    @OneToMany(mappedBy = "reply_to",cascade = CascadeType.ALL)
-    Set<Message>messages = new HashSet<>();
+    //Referencing
+    @OneToMany(mappedBy = "message_id", cascade = CascadeType.ALL)
+    Set<Attachment> attachments = new HashSet<>();
 
-
-
-
-
-
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    Set<Message> messages = new HashSet<>();
 }

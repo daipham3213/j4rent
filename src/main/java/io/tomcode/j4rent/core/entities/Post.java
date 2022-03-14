@@ -1,54 +1,46 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-@EqualsAndHashCode
-@Data //Set -Get
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Post")
-@Table(name = "Post")
-
-public class Post extends BaseEntity  {
-    @Column( name = "content")
+@Table(name = "post")
+@Getter
+@Setter
+public class Post extends BaseEntity {
+    @Column(name = "content")
     private String content;
 
-    @Column( name = "latitude")
+    @Column(name = "latitude")
     private double latitude;
 
-    @Column ( name = "longitude")
+    @Column(name = "longitude")
     private double longitude;
 
-    @Column ( name = "price")
+    @Column(name = "price")
     private double price;
 
-    @Column ( name = "floorArea")
+    @Column(name = "floor_area")
     private float floorArea;
 
-    @Column ( name = "address")
+    @Column(name = "address")
     private String address;
 
-    @Column ( name = "furnitureStatus")
+    @Column(name = "furniture_status")
     private String furnitureStatus;
-
-    // Foreign key
-    @ManyToOne
-    @JoinColumn(name = "create_by_id", nullable = false)
-    private Account create_by_id;
 
     @ManyToOne
     @JoinColumn(name = "album_id", nullable = false)
-    private Album album_id;
+    private Album album;
 
     //Reference
-    @OneToMany(mappedBy = "post_id",cascade = CascadeType.ALL)
-    Set<Comment> post_id= new HashSet<>();
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    Set<Comment> comments = new HashSet<>();
 }

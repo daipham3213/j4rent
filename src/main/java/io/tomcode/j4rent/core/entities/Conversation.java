@@ -1,8 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
@@ -11,15 +9,16 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data //Set -Get
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Conversation")
-@Table(name = "Conversation")
-public class Conversation extends BaseEntity  {
+@Table(name = "conversation")
+@Getter
+@Setter
+public class Conversation extends BaseEntity {
 
     @OneToMany(mappedBy = "conversation",cascade = CascadeType.ALL)
-    Set<Message> messages = new HashSet<>();
+    private Set<Message> messages = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "Member",
