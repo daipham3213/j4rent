@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1647237521152-1" author="henry (generated)">
+        <createTable tableName="account">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_account"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fist_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="dob" type="DATETIME"/>
+            <column name="id_card" type="VARCHAR(15)"/>
+            <column defaultValue="male" name="gender" type="VARCHAR(10)"/>
+            <column name="phone_number" type="VARCHAR(15)"/>
+            <column name="email" type="VARCHAR(100)"/>
+            <column defaultValueBoolean="false" name="is_verify" type="BOOL"/>
+            <column defaultValueBoolean="false" name="is_admin" type="BOOL"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-2" author="henry (generated)">
+        <createTable tableName="album">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_album"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="is_hidden" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-3" author="henry (generated)">
+        <createTable tableName="attachment">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_attachment"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="url" type="VARCHAR(255)"/>
+            <column name="caption" type="VARCHAR(255)"/>
+            <column name="message_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-4" author="henry (generated)">
+        <createTable tableName="comment">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_comment"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="contents" type="VARCHAR(255)"/>
+            <column name="parent_n_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="album_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-5" author="henry (generated)">
+        <createTable tableName="conversation">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_conversation"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-6" author="henry (generated)">
+        <createTable tableName="document">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_document"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="document_code" type="VARCHAR(255)"/>
+            <column name="data" type="jsonb"/>
+            <column name="is_workflow" type="BOOLEAN"/>
+            <column name="is_auth" type="BOOLEAN"/>
+            <column name="is_register" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-7" author="henry (generated)">
+        <createTable tableName="image">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_image"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="url" type="VARCHAR(255)"/>
+            <column name="caption" type="VARCHAR(255)"/>
+            <column name="is_hidden" type="VARCHAR(255)"/>
+            <column name="album_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-8" author="henry (generated)">
+        <createTable tableName="member">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_member"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="account_id" type="UUID"/>
+            <column name="conversation_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-9" author="henry (generated)">
+        <createTable tableName="message">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_message"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="conversation_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sender" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reply_to" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-10" author="henry (generated)">
+        <createTable tableName="permission">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_permission"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-11" author="henry (generated)">
+        <createTable tableName="post">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_post"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="content" type="VARCHAR(255)"/>
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            <column name="price" type="DOUBLE"/>
+            <column name="floor_area" type="FLOAT"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="furniture_status" type="VARCHAR(255)"/>
+            <column name="album_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-12" author="henry (generated)">
+        <createTable tableName="role">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-13" author="henry (generated)">
+        <createTable tableName="status">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_status"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="parent_n_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-14" author="henry (generated)">
+        <createTable tableName="workflow">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_workflow"/>
+            </column>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="DATETIME"/>
+            <column name="created_by_id" type="UUID"/>
+            <column name="modified_by_id" type="UUID"/>
+            <column name="status_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="document_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1647237521152-15" author="henry (generated)">
+        <addUniqueConstraint columnNames="email" constraintName="uc_account_email" tableName="account"/>
+    </changeSet>
+    <changeSet id="1647237521152-16" author="henry (generated)">
+        <addUniqueConstraint columnNames="id_card" constraintName="uc_account_id_card" tableName="account"/>
+    </changeSet>
+    <changeSet id="1647237521152-17" author="henry (generated)">
+        <addUniqueConstraint columnNames="phone_number" constraintName="uc_account_phone_number" tableName="account"/>
+    </changeSet>
+    <changeSet id="1647237521152-18" author="henry (generated)">
+        <addUniqueConstraint columnNames="username" constraintName="uc_account_username" tableName="account"/>
+    </changeSet>
+    <changeSet id="1647237521152-19" author="henry (generated)">
+        <addUniqueConstraint columnNames="code" constraintName="uc_permission_code" tableName="permission"/>
+    </changeSet>
+    <changeSet id="1647237521152-20" author="henry (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_role_name" tableName="role"/>
+    </changeSet>
+    <changeSet id="1647237521152-21" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="attachment"
+                                 constraintName="FK_ATTACHMENT_ON_MESSAGE" referencedColumnNames="id"
+                                 referencedTableName="message"/>
+    </changeSet>
+    <changeSet id="1647237521152-22" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="album_id" baseTableName="comment" constraintName="FK_COMMENT_ON_ALBUM"
+                                 referencedColumnNames="id" referencedTableName="album"/>
+    </changeSet>
+    <changeSet id="1647237521152-23" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="parent_n_id" baseTableName="comment"
+                                 constraintName="FK_COMMENT_ON_PARENT_N" referencedColumnNames="id"
+                                 referencedTableName="comment"/>
+    </changeSet>
+    <changeSet id="1647237521152-24" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="post_id" baseTableName="comment" constraintName="FK_COMMENT_ON_POST"
+                                 referencedColumnNames="id" referencedTableName="post"/>
+    </changeSet>
+    <changeSet id="1647237521152-25" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="album_id" baseTableName="image" constraintName="FK_IMAGE_ON_ALBUM"
+                                 referencedColumnNames="id" referencedTableName="album"/>
+    </changeSet>
+    <changeSet id="1647237521152-26" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="member"
+                                 constraintName="FK_MEMBER_ON_ACCOUNT" referencedColumnNames="id"
+                                 referencedTableName="account"/>
+    </changeSet>
+    <changeSet id="1647237521152-27" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="conversation_id" baseTableName="member"
+                                 constraintName="FK_MEMBER_ON_CONVERSATION" referencedColumnNames="id"
+                                 referencedTableName="conversation"/>
+    </changeSet>
+    <changeSet id="1647237521152-28" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="conversation_id" baseTableName="message"
+                                 constraintName="FK_MESSAGE_ON_CONVERSATION" referencedColumnNames="id"
+                                 referencedTableName="conversation"/>
+    </changeSet>
+    <changeSet id="1647237521152-29" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="reply_to" baseTableName="message"
+                                 constraintName="FK_MESSAGE_ON_REPLY_TO" referencedColumnNames="id"
+                                 referencedTableName="message"/>
+    </changeSet>
+    <changeSet id="1647237521152-30" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="sender" baseTableName="message" constraintName="FK_MESSAGE_ON_SENDER"
+                                 referencedColumnNames="id" referencedTableName="account"/>
+    </changeSet>
+    <changeSet id="1647237521152-31" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="album_id" baseTableName="post" constraintName="FK_POST_ON_ALBUM"
+                                 referencedColumnNames="id" referencedTableName="album"/>
+    </changeSet>
+    <changeSet id="1647237521152-32" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="parent_n_id" baseTableName="status"
+                                 constraintName="FK_STATUS_ON_PARENT_N" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+    </changeSet>
+    <changeSet id="1647237521152-33" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="document_id" baseTableName="workflow"
+                                 constraintName="FK_WORKFLOW_ON_DOCUMENT" referencedColumnNames="id"
+                                 referencedTableName="document"/>
+    </changeSet>
+    <changeSet id="1647237521152-34" author="henry (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="workflow"
+                                 constraintName="FK_WORKFLOW_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+    </changeSet>
+
+</databaseChangeLog>
