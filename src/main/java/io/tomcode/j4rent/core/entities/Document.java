@@ -11,7 +11,12 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity(name = "Document")
 @Table(name = "document")
@@ -30,5 +35,10 @@ public class Document extends BaseEntity {
 
     private boolean isWorkflow;
     private boolean isAuth;
+
+
+    @OneToMany(mappedBy = "document", orphanRemoval = true)
+    private List<Workflow> workflows = new ArrayList<>();
+
     private boolean isRegister;
 }

@@ -17,12 +17,17 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Workflow extends BaseEntity {
+    // Foreign key
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "status_id", nullable = false)
+    @JoinColumn(name = "status_id")
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "document_id", nullable = false)
+    @JoinColumn(name = "document_id")
     private Document document;
+
 }

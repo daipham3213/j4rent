@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface IAccountService {
+
     Iterable<Account> getAllAccount();
+
     Account createAccount(Account account);
+
 }

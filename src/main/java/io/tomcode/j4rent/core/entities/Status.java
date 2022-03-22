@@ -4,9 +4,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,10 +18,10 @@ public class Status extends BaseEntity {
 
     // Foreign key
     @ManyToOne
-    @JoinColumn(name = "parent_n_id")
-    private Status parentN;
-
+    @JoinColumn(name = "parent_n")
+    private Status status;
     //Reference
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private Set<Workflow> workflows = new HashSet<>();
+        @OneToMany(mappedBy = "status", orphanRemoval = true)
+        private List<Workflow> workflows = new ArrayList<>();
+
 }

@@ -7,4 +7,8 @@ import java.util.UUID;
 
 @Repository
 public interface AccountRepository extends BaseRepository<Account, UUID> {
+
+    Account findAccountByUsername(String userName);
+
+
 }

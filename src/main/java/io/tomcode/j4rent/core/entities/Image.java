@@ -19,7 +19,7 @@ public class Image extends BaseEntity {
     private String caption;
     @Column(name = "is_hidden")
     private String isHidden;
-
+//
     @ManyToOne
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;

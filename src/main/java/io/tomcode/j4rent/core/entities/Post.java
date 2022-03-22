@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,10 +38,17 @@ public class Post extends BaseEntity {
     private String furnitureStatus;
 
     @ManyToOne
-    @JoinColumn(name = "album_id", nullable = false)
+    @JoinColumn(name = "album_id")
     private Album album;
 
-    //Reference
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    Set<Comment> comments = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+
+   // Reference
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private Set<Comment> comments = new LinkedHashSet<>();
+
 }

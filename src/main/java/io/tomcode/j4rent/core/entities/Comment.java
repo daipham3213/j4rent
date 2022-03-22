@@ -18,17 +18,29 @@ public class Comment extends BaseEntity {
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name = "parent_n_id", nullable = false)
-    private Comment parentN;
-
-    @ManyToOne
-    @JoinColumn(name = "album_id", nullable = false)
+    @JoinColumn(name = "album_id")
     private Album album;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
-    private List<Comment> replies;
+    @ManyToOne
+    @JoinColumn(name = "parent_n")
+    private Comment parent_n;
+
+//    @ManyToOne
+//    @JoinColumn(name = "parent_n", nullable = false)
+//    private Comment parentN;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "album", nullable = false)
+//    private Album album;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "post", nullable = false)
+//    private Post post;
+//
+//    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+//    private List<Comment> replies;
 }

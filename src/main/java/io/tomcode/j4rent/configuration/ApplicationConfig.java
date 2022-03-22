@@ -14,5 +14,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableJpaRepositories(basePackages = {"io.tomcode.j4rent.core.repositories"})
 @ComponentScan(basePackages = {"io.tomcode.j4rent"})
 public class ApplicationConfig {
+
     
 }

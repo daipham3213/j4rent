@@ -1,13 +1,13 @@
 package io.tomcode.j4rent.core.entities;
 
+import liquibase.pro.packaged.A;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,14 +21,22 @@ public class Album extends BaseEntity {
 
     @Column(name = "is_hidden")
     private String isHidden;
+    // Foreign key
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     //Reference
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private Set<Image> images = new HashSet<>();
+    @OneToMany(mappedBy = "album", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+    @OneToMany(mappedBy = "album", orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<>();
+    @OneToMany(mappedBy = "album", orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
+
+
+
 }
