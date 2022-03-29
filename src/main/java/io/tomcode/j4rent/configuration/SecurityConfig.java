@@ -1,53 +1,70 @@
 package io.tomcode.j4rent.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@EnableWebSecurity
+
+@Component
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true
+)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserDetailsService userDetailsService;
+
+    public static final String AUTHORITIES_CLAIM_NAME = "roles";
 
     @Bean(name = "passwordEncoder")
-    public  static PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http
-                .authorizeRequests()
-                .antMatchers("/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/account/register").permitAll()
-                .antMatchers(HttpMethod.GET,"/role").hasRole("USER")
-                .antMatchers(HttpMethod.GET,"/account").permitAll()
-                .anyRequest().authenticated()
+                .cors()
                 .and()
-                .formLogin()
-                .defaultSuccessUrl("/account")
-                .permitAll()
+                .csrf()
+                .disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .logout()
-                .permitAll();
+                .authorizeRequests(config -> {
+                    config
+                            .antMatchers(
+                                    "/account/register",
+                                    "/account/verify",
+                                    "/account/create",
+                                    "/account/login"
+                            )
+                            .permitAll()
+                            .anyRequest()
+                            .permitAll();
+                })
+                .exceptionHandling()
+                .disable()
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
-//        http.csrf().disable();
+        http.oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(authenticationConverter());
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    protected JwtAuthenticationConverter authenticationConverter() {
+        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        authoritiesConverter.setAuthorityPrefix("");
+        authoritiesConverter.setAuthoritiesClaimName(AUTHORITIES_CLAIM_NAME);
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return converter;
     }
-
-
 }

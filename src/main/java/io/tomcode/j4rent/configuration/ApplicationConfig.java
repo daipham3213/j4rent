@@ -1,10 +1,14 @@
 package io.tomcode.j4rent.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
@@ -15,5 +19,19 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ComponentScan(basePackages = {"io.tomcode.j4rent"})
 public class ApplicationConfig {
 
-    
+    @Bean
+    public SimpleMailMessage templateSimpleMessage() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setText(
+                "This is the test email template for your email:\n%s\n");
+        return message;
+    }
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
+    }
 }

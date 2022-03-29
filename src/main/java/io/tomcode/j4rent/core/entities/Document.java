@@ -14,9 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity(name = "Document")
 @Table(name = "document")
@@ -34,11 +32,9 @@ public class Document extends BaseEntity {
     private JsonNode data;
 
     private boolean isWorkflow;
-    private boolean isAuth;
 
+    private boolean isOTP;
 
     @OneToMany(mappedBy = "document", orphanRemoval = true)
     private List<Workflow> workflows = new ArrayList<>();
-
-    private boolean isRegister;
 }
