@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,7 +19,7 @@ import java.util.*;
 @Setter
 @Entity(name = "Account")
 @Table(name = "account")
-public class Account extends BaseEntity {
+public class Account extends BaseEntity implements UserDetails {
     @Column(name = "username", nullable = false, unique = true, updatable = false, length = 50)
     private String username;
 
@@ -50,37 +53,43 @@ public class Account extends BaseEntity {
     @Column(name = "is_admin", columnDefinition = "BOOL DEFAULT false")
     private boolean isAdmin;
 
-    // Foreign key
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "role_id")
     private  Role role;
 
-//    //Reference
-    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    @OneToMany(mappedBy = "createdById", orphanRemoval = true)
     private List<Album> albums = new ArrayList<>();
 
     @OneToMany(mappedBy = "account", orphanRemoval = true)
     private List<Workflow> workflows = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    @OneToMany(mappedBy = "createdById", orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
-//
-//
-//
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "Member",
-//            joinColumns = @JoinColumn(name = "account_id"),
-//            inverseJoinColumns = @JoinColumn(name = "thread_id"))
-//    private Set<Conversation> thread_id = new LinkedHashSet<>();
-//
-//
-//    public Set<Conversation> getThread_id() {
-//        return thread_id;
-//    }
-//
-//    public void setThread_id(Set<Conversation> thread_id) {
-//        this.thread_id = thread_id;
-//    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isVerify;
+    }
+
 }

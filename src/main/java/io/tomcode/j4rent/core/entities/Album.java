@@ -21,13 +21,7 @@ public class Album extends BaseEntity {
 
     @Column(name = "is_hidden")
     private String isHidden;
-    // Foreign key
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-
-    //Reference
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -36,7 +30,4 @@ public class Album extends BaseEntity {
 
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
-
-
-
 }

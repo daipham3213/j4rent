@@ -1,10 +1,9 @@
 package io.tomcode.j4rent.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +12,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
+
 
 
 @Component
@@ -56,6 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(authenticationConverter());
+
+
     }
 
     protected JwtAuthenticationConverter authenticationConverter() {
@@ -67,4 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return converter;
     }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//            auth.jdbcAuthentication().dataSource(dataSource)
+//                .usersByUsernameQuery("SELECT username,password FROM account WHERE username=?")
+//                .authoritiesByUsernameQuery("SELECT username FROM account    WHERE username=?")
+//                .passwordEncoder(new BCryptPasswordEncoder());
+//    }
+
+
 }

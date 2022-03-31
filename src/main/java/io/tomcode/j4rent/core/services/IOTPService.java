@@ -1,6 +1,7 @@
 package io.tomcode.j4rent.core.services;
 
 import io.tomcode.j4rent.core.entities.OTP;
+import io.tomcode.j4rent.exception.InvalidOTPException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -14,6 +15,6 @@ public interface IOTPService {
 
     void cleanOTP(int otp);
 
-    OTP getOTP(int OTP);
+    OTP getOTP(int OTP) throws InvalidOTPException;
 
 }

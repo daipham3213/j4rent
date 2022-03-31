@@ -22,7 +22,7 @@ import java.util.UUID;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class BaseEntity {
+public abstract class BaseEntity  {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -43,10 +43,12 @@ public abstract class BaseEntity {
 
 
     @Column(name = "created_at", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdDate;
 
     @Column(name = "modified_at")
+    @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date modifiedDate;
 

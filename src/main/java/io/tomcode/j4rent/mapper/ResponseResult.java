@@ -1,17 +1,19 @@
 package io.tomcode.j4rent.mapper;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.http.HttpStatus;
 
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
 public class ResponseResult {
-    private int status;
     private String error;
     private Object data;
+    private int status;
 
-
-
+    public ResponseResult(HttpStatus status, String error, Object data) {
+        this.error = error;
+        this.data = data;
+        this.status = status.value();
+    }
 }

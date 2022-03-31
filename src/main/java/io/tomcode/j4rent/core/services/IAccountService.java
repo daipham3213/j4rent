@@ -3,6 +3,7 @@ package io.tomcode.j4rent.core.services;
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.exception.EmailExistsException;
+import io.tomcode.j4rent.exception.InvalidOTPException;
 import io.tomcode.j4rent.exception.PhoneNumberExistsException;
 import io.tomcode.j4rent.exception.UsernameExistsException;
 import io.tomcode.j4rent.mapper.CreateAccount;
@@ -22,9 +23,9 @@ public interface IAccountService {
 
     OTP register(Register account);
 
-    Account verify(int otp);
+    void verify(int otp) throws InvalidOTPException;
 
-    Account createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException;
+    Account createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException;
 
     Boolean checkAccountExists(Register register) throws UsernameExistsException, PhoneNumberExistsException, EmailExistsException;
 

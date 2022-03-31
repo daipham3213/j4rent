@@ -17,7 +17,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Workflow extends BaseEntity {
-    // Foreign key
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
@@ -29,5 +28,4 @@ public class Workflow extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "document_id")
     private Document document;
-
 }

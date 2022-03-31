@@ -3,6 +3,7 @@ package io.tomcode.j4rent.services;
 import io.tomcode.j4rent.core.repositories.OTPRepository;
 import io.tomcode.j4rent.core.services.IOTPService;
 import io.tomcode.j4rent.core.entities.OTP;
+import io.tomcode.j4rent.exception.InvalidOTPException;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -41,8 +42,12 @@ public class OTPService implements IOTPService {
     }
 
     @Override
-    public OTP getOTP(int otp) {
-        return otpRepository.findOTPByOtp(otp);
+    public OTP getOTP(int otp) throws InvalidOTPException {
+        OTP value = otpRepository.findOTPByOtp(otp);
+        if (value == null) {
+            throw new InvalidOTPException();
+        }
+        return value;
     }
 
 }

@@ -16,37 +16,37 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Post extends BaseEntity {
+
+    @NonNull
     @Column(name = "content")
     private String content;
 
+    @NonNull
     @Column(name = "latitude")
     private double latitude;
 
+    @NonNull
     @Column(name = "longitude")
     private double longitude;
-
+    @NonNull
     @Column(name = "price")
     private double price;
 
+    @NonNull
     @Column(name = "floor_area")
     private float floorArea;
 
+    @NonNull
     @Column(name = "address")
     private String address;
 
+    @NonNull
     @Column(name = "furniture_status")
     private String furnitureStatus;
 
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
-
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-
-
-   // Reference
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();

@@ -19,4 +19,6 @@ public interface IDocumentService {
     JsonNode obj2Json(Object object) throws JsonProcessingException;
 
     Document getDocument(UUID documentId);
+
+
 }

@@ -9,12 +9,12 @@ import io.tomcode.j4rent.core.entities.Role;
 import io.tomcode.j4rent.core.repositories.AccountRepository;
 import io.tomcode.j4rent.core.services.*;
 import io.tomcode.j4rent.exception.EmailExistsException;
+import io.tomcode.j4rent.exception.InvalidOTPException;
 import io.tomcode.j4rent.exception.PhoneNumberExistsException;
 import io.tomcode.j4rent.exception.UsernameExistsException;
 import io.tomcode.j4rent.mapper.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -67,22 +67,19 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public Account verify(int otp) {
+    public void verify(int otp) throws InvalidOTPException {
         OTP verifyOTP = otpService.getOTP(otp);
-        if (verifyOTP == null)
-            return null;
-        else {
-            Document document = documentService.getDocument(verifyOTP.getDocumentId());
-            return objectMapper.convertValue(document.getData(), Account.class);
+        if (verifyOTP == null) {
+            throw new InvalidOTPException();
         }
     }
 
     @Override
-    public Account createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException {
+    public Account createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException {
         OTP otp = otpService.getOTP(account.getOtp());
         Document document = documentService.getDocument(otp.getDocumentId());
-        Register register =  objectMapper.convertValue(document.getData(),Register.class);
-        Account info  = modelMapper.map(account,Account.class);
+        Register register = objectMapper.convertValue(document.getData(), Register.class);
+        Account info = modelMapper.map(account, Account.class);
         info.setUsername(register.getUsername());
         info.setPhoneNumber(register.getPhoneNumber());
         info.setEmail(register.getEmail());
@@ -94,13 +91,12 @@ public class AccountService implements IAccountService, UserDetailsService {
     @Override
     public Boolean checkAccountExists(Register register) throws UsernameExistsException, PhoneNumberExistsException, EmailExistsException {
         if (accountRepository.findAccountByUsername(register.getUsername()) != null) {
-            throw new UsernameExistsException() ;
+            throw new UsernameExistsException();
         } else {
             if (accountRepository.findAccountByEmail(register.getEmail()) != null) {
-                throw new PhoneNumberExistsException() ;
+                throw new PhoneNumberExistsException();
             } else if (accountRepository.findAccountByPhoneNumber(register.getPhoneNumber()) != null)
                 throw new EmailExistsException();
-
         }
         return false;
     }

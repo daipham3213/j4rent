@@ -55,4 +55,5 @@ public class DocumentService implements IDocumentService {
     public Document getDocument(UUID documentId) {
         return documentRepository.findDocumentById(documentId);
     }
+
 }

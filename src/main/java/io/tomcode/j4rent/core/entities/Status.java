@@ -13,15 +13,16 @@ import java.util.*;
 @Getter
 @Setter
 public class Status extends BaseEntity {
-    @Column( name = "name")
+    @Column(name = "name")
     private String name;
 
     // Foreign key
     @ManyToOne
     @JoinColumn(name = "parent_n")
     private Status status;
+
     //Reference
-        @OneToMany(mappedBy = "status", orphanRemoval = true)
-        private List<Workflow> workflows = new ArrayList<>();
+    @OneToMany(mappedBy = "status", orphanRemoval = true)
+    private List<Workflow> workflows = new ArrayList<>();
 
 }
