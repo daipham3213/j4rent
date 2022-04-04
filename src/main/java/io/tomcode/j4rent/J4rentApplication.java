@@ -12,10 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 @ComponentScan(basePackages = {"io.tomcode.j4rent.configuration"})
 public class J4rentApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(J4rentApplication.class, args);
     }
-
-
 }
