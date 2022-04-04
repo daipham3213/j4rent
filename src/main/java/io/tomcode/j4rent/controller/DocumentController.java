@@ -4,9 +4,12 @@ import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Document;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.services.IDocumentService;
+import io.tomcode.j4rent.mapper.DocumentCreate;
+import io.tomcode.j4rent.mapper.ResponseResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/document")
@@ -24,14 +27,12 @@ public class DocumentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Document> createDocument(@RequestBody Account account) {
+    public ResponseEntity<ResponseResult> createDocument(@RequestBody DocumentCreate documentCreate) {
         try {
-//            return new ResponseEntity<>(documentService.createDocument(account),HttpStatus.CREATED);
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            Document document = documentService.createDocument(documentCreate);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", document.getData()), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-
 }

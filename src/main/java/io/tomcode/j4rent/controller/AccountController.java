@@ -6,6 +6,7 @@ import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.mapper.*;
 
+import liquibase.pro.packaged.U;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class AccountController {
     @PostMapping("/create")
     public ResponseEntity<ResponseResult> create(@RequestBody CreateAccount account) {
         try {
-            Account newAccount = accountService.createAccount(account);
+            UserInfo newAccount = accountService.createAccount(account);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", newAccount), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

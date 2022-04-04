@@ -30,4 +30,19 @@ public class Album extends BaseEntity {
 
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
+
+    public Album(List<Image> imageLoads) {
+        this.images = imageLoads;
+    }
+
+    public Album(String name, String is_hidden, List<Image> imageLoads) {
+        this.images = imageLoads;
+        this.name = name;
+        this.isHidden = is_hidden;
+    }
+
+    public Album(String name, String is_hidden) {
+        this.name = name;
+        this.isHidden = is_hidden;
+    }
 }

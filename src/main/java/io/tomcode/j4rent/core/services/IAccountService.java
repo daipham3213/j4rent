@@ -6,10 +6,7 @@ import io.tomcode.j4rent.exception.EmailExistsException;
 import io.tomcode.j4rent.exception.InvalidOTPException;
 import io.tomcode.j4rent.exception.PhoneNumberExistsException;
 import io.tomcode.j4rent.exception.UsernameExistsException;
-import io.tomcode.j4rent.mapper.CreateAccount;
-import io.tomcode.j4rent.mapper.JwtResponse;
-import io.tomcode.j4rent.mapper.Login;
-import io.tomcode.j4rent.mapper.Register;
+import io.tomcode.j4rent.mapper.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +22,7 @@ public interface IAccountService {
 
     void verify(int otp) throws InvalidOTPException;
 
-    Account createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException;
+    UserInfo createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException;
 
     Boolean checkAccountExists(Register register) throws UsernameExistsException, PhoneNumberExistsException, EmailExistsException;
 

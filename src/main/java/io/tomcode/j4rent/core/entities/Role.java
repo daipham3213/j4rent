@@ -25,6 +25,10 @@ public class Role extends BaseEntity implements GrantedAuthority {
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     Set<Account> accounts = new HashSet<>();
 
+    public Role(String role) {
+        this.name = role;
+    }
+
     @Override
     public String getAuthority() {
         return getId().toString();

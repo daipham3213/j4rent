@@ -1,5 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
+import io.tomcode.j4rent.mapper.PostDetails;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
@@ -51,4 +52,13 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
+    public Post(PostDetails postDetails) {
+        this.content = postDetails.getContent();
+        this.latitude = postDetails.getLatitude();
+        this.longitude = postDetails.getLongitude();
+        this.price = postDetails.getPrice();
+        this.floorArea=postDetails.getFloorArea();
+        this.address=postDetails.getAddress();
+        this.furnitureStatus = postDetails.getFurnitureStatus();
+    }
 }

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 
-
 @Component
 @EnableGlobalMethodSecurity(
         prePostEnabled = true
@@ -42,14 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(config -> {
                     config
                             .antMatchers(
-                                    "/account/register",
-                                    "/account/verify",
-                                    "/account/create",
-                                    "/account/login"
+                                    "/account/*",
+                                    "/roles"
                             )
                             .permitAll()
                             .anyRequest()
-                            .permitAll();
+                            .anonymous();
+
                 })
                 .exceptionHandling()
                 .disable()

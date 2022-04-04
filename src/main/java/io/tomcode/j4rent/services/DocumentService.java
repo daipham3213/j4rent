@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tomcode.j4rent.core.entities.Document;
 import io.tomcode.j4rent.core.repositories.DocumentRepository;
 import io.tomcode.j4rent.core.services.IDocumentService;
+import io.tomcode.j4rent.mapper.DocumentCreate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,9 +19,16 @@ public class DocumentService implements IDocumentService {
         this.documentRepository = documentRepository;
     }
 
+
     @Override
-    public Document createDocument(Document document) {
-        return documentRepository.save(document);
+    public Document createDocument(Document Document) {
+
+        return documentRepository.save(Document);
+    }
+
+    @Override
+    public Document createDocument(DocumentCreate Document) {
+        return null;
     }
 
     @Override
@@ -33,7 +41,7 @@ public class DocumentService implements IDocumentService {
             document.setWorkflow(false);
             document.setOTP(true);
             return documentRepository.save(document);
-        } catch (JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;

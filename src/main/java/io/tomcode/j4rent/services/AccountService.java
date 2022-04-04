@@ -41,8 +41,9 @@ public class AccountService implements IAccountService, UserDetailsService {
     private final IJwtService jwtService;
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+    private final IRoleService roleService;
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, ModelMapper modelMapper, ObjectMapper objectMapper) {
+    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, ModelMapper modelMapper, ObjectMapper objectMapper, IRoleService roleService) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.documentService = documentService;
@@ -51,6 +52,7 @@ public class AccountService implements IAccountService, UserDetailsService {
         this.jwtService = jwtService;
         this.modelMapper = modelMapper;
         this.objectMapper = objectMapper;
+        this.roleService = roleService;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public Account createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException {
+    public UserInfo createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException {
         OTP otp = otpService.getOTP(account.getOtp());
         Document document = documentService.getDocument(otp.getDocumentId());
         Register register = objectMapper.convertValue(document.getData(), Register.class);
@@ -84,7 +86,10 @@ public class AccountService implements IAccountService, UserDetailsService {
         info.setPhoneNumber(register.getPhoneNumber());
         info.setEmail(register.getEmail());
         checkAccountExists(register);
-        return populateAccount(info);
+        populateAccount(info);
+        return  new UserInfo(info.getUsername(), info.getFirstName(),info.getLastName(),info.getDob(),info.getIdCard(),info.getGender(),info.getPhoneNumber(),info.getEmail());
+
+
 
     }
 
@@ -145,6 +150,9 @@ public class AccountService implements IAccountService, UserDetailsService {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setVerify(true);
         account.setAdmin(false);
+        if(roleService.getRoleByName("USER")==null)
+            roleService.createRole("USER");
+        account.setRole(roleService.getRoleByName("USER"));
         return accountRepository.save(account);
     }
 
