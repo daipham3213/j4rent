@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/account")
+@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class AccountController {
 
     private final IAccountService accountService;
@@ -25,18 +26,11 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("")
-    @ResponseBody
-    public ResponseEntity<String> testResponse() {
-        return new ResponseEntity<>("Hello world", HttpStatus.OK);
+    @GetMapping("/")
+    public ResponseEntity<UserInfo> currentUser() {
+        return new ResponseEntity<>(accountService.getCurrentAccount(), HttpStatus.OK);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Iterable<Account>> getAll() {
-        Authentication auth = accountService.getAuthentication();
-
-        return new ResponseEntity<>(accountService.getAllAccount(), HttpStatus.OK);
-    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseResult> register(@RequestBody Register register) {
@@ -60,19 +54,18 @@ public class AccountController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Object> verifyOTP(@RequestBody int otp) {
+    public ResponseEntity<Object> verifyOTP(@RequestBody VerifyOTP otp) {
         try {
-            accountService.verify(otp);
+            accountService.verify(otp.getOtp());
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Valid OTP"), HttpStatus.OK);
-
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<JwtResponse> login(@RequestBody Login login) {
+    public ResponseEntity<ResponseResult> login(@RequestBody Login login) {
         JwtResponse response = accountService.authenticate(login);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", response), HttpStatus.OK);
     }
 }

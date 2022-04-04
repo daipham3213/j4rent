@@ -6,6 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface IImageService {
-
-    void upImage(ImageLoad file) throws ImageFailException;
+    void upload(ImageLoad file) throws ImageFailException;
 }

@@ -7,7 +7,6 @@ import io.tomcode.j4rent.mapper.ResponseResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -55,7 +54,7 @@ public class ImageController {
             if (bi == null) {
                 throw new ImageFailException();
             }
-            imageService.upImage(imageLoad);
+            imageService.upload(imageLoad);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "sent img"), HttpStatus.OK);
         } catch (Exception e) {
             throw new ImageFailException();

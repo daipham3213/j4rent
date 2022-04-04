@@ -27,8 +27,7 @@ public class CloudinaryConfig {
         valuesMap.put("cloud_name", cloudinary_name);
         valuesMap.put("api_key", api_key);
         valuesMap.put("api_secret", api_secret);
-        Cloudinary cloudinary = new Cloudinary(valuesMap);
-        return cloudinary;
+        return new Cloudinary(valuesMap);
     }
 
 }

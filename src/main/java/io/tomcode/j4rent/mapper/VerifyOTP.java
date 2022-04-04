@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class Register {
-     String username;
-     String email;
-     String phoneNumber;
+@AllArgsConstructor
+public class VerifyOTP {
+    private int otp;
 }

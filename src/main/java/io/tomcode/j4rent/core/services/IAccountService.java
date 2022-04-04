@@ -33,4 +33,6 @@ public interface IAccountService {
     Account getAccountByUsername(String username);
 
     JwtResponse authenticate(Login login);
+
+    UserInfo getCurrentAccount();
 }

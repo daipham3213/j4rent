@@ -21,7 +21,7 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    public void upImage(ImageLoad imageLoad) throws ImageFailException {
+    public void upload(ImageLoad imageLoad) throws ImageFailException {
         try {
             Map uploadResult = cloudinaryService.upload(imageLoad.getFile());
             Image image = new Image(imageLoad.getTitle(), (String) uploadResult.get("url"));
