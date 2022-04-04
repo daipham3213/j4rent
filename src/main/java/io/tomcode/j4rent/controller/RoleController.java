@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/role")
-public class RoleController {
+public class  RoleController {
     private final IRoleService roleService;
 
     public RoleController(IRoleService roleService) {
@@ -33,7 +33,6 @@ public class RoleController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @GetMapping("/")
     @ResponseBody
     public ResponseEntity<ResponseResult> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
@@ -47,7 +46,6 @@ public class RoleController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
     @GetMapping("/name/{name}")
     public ResponseEntity<Role> getRoleByName(@PathVariable String name) {
         return new ResponseEntity<>(roleService.getRoleByName(name), HttpStatus.OK);

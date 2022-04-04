@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -16,9 +17,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        super.handleExceptionInternal(ex, body, headers, status, request);
-        return new ResponseEntity<>(new ResponseResult(status, ex.getMessage(), null), status);
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ResponseResult> handleResponseException(ResponseStatusException exception, WebRequest request) {
+        return new ResponseEntity<>(new ResponseResult(HttpStatus.BAD_REQUEST, exception.getReason(), null), HttpStatus.BAD_REQUEST);
     }
+
 }

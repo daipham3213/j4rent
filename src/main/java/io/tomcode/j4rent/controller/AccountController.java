@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
-@CrossOrigin(origins = {"${app.security.cors.origin}"})
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -61,10 +60,10 @@ public class AccountController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Object> verifyOTP(@RequestBody OTP otp) {
+    public ResponseEntity<Object> verifyOTP(@RequestBody int otp) {
         try {
-            accountService.verify(otp.getOtp());
-            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", true), HttpStatus.OK);
+            accountService.verify(otp);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Valid OTP"), HttpStatus.OK);
 
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
