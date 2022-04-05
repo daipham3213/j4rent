@@ -1,22 +1,14 @@
 package io.tomcode.j4rent.mapper;
 
-import io.tomcode.j4rent.core.entities.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 
-public class PostDetails {
-
-    private UUID id;
-
+public class PostView {
     private String content;
 
     private double latitude;
@@ -31,10 +23,6 @@ public class PostDetails {
 
     private String furnitureStatus;
 
-    private Date createdDate;
-
-    private AlbumView album;
-
-    private List<Comment> comments;
+    private  AlbumView  album;
 
 }

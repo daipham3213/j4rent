@@ -17,13 +17,11 @@ public interface IPostService {
 
     Page<PostDetails> getAllPost(Pageable page);
 
-    Page<PostDetails> getAllPost(Pageable page, int min, int max);
 
-    Page<PostDetails> getAllPost(Pageable page, int floorArea);
+    Page<PostDetails> getAllPost(Pageable page, int floorArea , int min ,int max);
 
     Page<PostDetails> getCreatedPosts(Pageable page);
 
-    Page<PostDetails> getCreatedPosts(Pageable page, int min, int max);
 
-    Page<PostDetails> getCreatedPosts(Pageable page, int floorArea);
+    Page<PostDetails> getCreatedPosts(Pageable page, int floorArea, int min, int max);
 }

@@ -9,7 +9,13 @@ import java.util.UUID;
 
 @Repository
 public interface AccountRepository extends BaseRepository<Account, UUID> {
+
+
     Account findAccountByUsername(String userName);
+
+    Account findAccountByEmail(String email);
+
+    Account findAccountByPhoneNumber(String numberPhone);
 
     Account findByUsernameEquals(@NonNull String username);
 

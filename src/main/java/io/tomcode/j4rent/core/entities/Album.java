@@ -1,5 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
+import io.tomcode.j4rent.mapper.ImageView;
 import liquibase.pro.packaged.A;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class Album extends BaseEntity {
     private String name;
 
     @Column(name = "is_hidden")
-    private String isHidden;
+    private Boolean isHidden;
 
     @OneToMany(mappedBy = "album", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
@@ -35,14 +36,19 @@ public class Album extends BaseEntity {
         this.images = imageLoads;
     }
 
-    public Album(String name, String is_hidden, List<Image> imageLoads) {
+    public Album(String name, Boolean is_hidden, List<Image> imageLoads) {
         this.images = imageLoads;
         this.name = name;
         this.isHidden = is_hidden;
     }
 
-    public Album(String name, String is_hidden) {
+    public Album(String name, Boolean is_hidden) {
         this.name = name;
         this.isHidden = is_hidden;
+    }
+
+    public Album(String name, List<ImageView> imageLoadList) {
+        this.name = name;
+
     }
 }

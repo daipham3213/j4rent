@@ -78,4 +78,6 @@ public class JwtConfiguration {
     public JwtDecoder jwtDecoder(RSAPublicKey rsaPublicKey) {
         return NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
     }
+
+
 }

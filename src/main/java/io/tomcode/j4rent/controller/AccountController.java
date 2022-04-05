@@ -3,13 +3,14 @@ package io.tomcode.j4rent.controller;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.services.IAccountService;
+import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.mapper.*;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-;
+import org.springframework.security.core.Authentication;;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/account")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class AccountController {
+
     private final IAccountService accountService;
 
     public AccountController(IAccountService accountService) {
@@ -30,6 +32,12 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<Account>> getAll() {
+        Authentication auth = accountService.getAuthentication();
+
+        return new ResponseEntity<>(accountService.getAllAccount(), HttpStatus.OK);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseResult> register(@RequestBody Register register) {
@@ -57,6 +65,7 @@ public class AccountController {
         try {
             accountService.verify(otp.getOtp());
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Valid OTP"), HttpStatus.OK);
+
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

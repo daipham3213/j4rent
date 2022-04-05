@@ -5,10 +5,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -50,9 +47,10 @@ public class Post extends BaseEntity {
     private Album album;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
-    private Set<Comment> comments = new LinkedHashSet<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public Post(PostDetails postDetails) {
+        setId(postDetails.getId());
         this.content = postDetails.getContent();
         this.latitude = postDetails.getLatitude();
         this.longitude = postDetails.getLongitude();

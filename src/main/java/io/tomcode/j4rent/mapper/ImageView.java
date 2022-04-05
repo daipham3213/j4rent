@@ -1,17 +1,18 @@
 package io.tomcode.j4rent.mapper;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class ImageLoad {
+
+public class ImageView {
+
     private String title;
 
-    private MultipartFile file;
+    private String file;
+
 }
