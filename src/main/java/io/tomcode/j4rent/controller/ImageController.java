@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 @Controller
 @RequestMapping("/image")
+@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class ImageController {
 
     private final IImageService imageService;

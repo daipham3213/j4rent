@@ -16,4 +16,13 @@ public class ResponseResult {
         this.data = data;
         this.status = status.value();
     }
+
+    public ResponseResult(HttpStatus status, String error) {
+        this.status = status.value();
+        this.error = error;
+    }
+
+    public ResponseResult(HttpStatus status, Object data) {
+
+    }
 }

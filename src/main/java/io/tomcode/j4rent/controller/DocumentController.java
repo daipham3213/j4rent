@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/document")
+@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class DocumentController {
 
     private final IDocumentService documentService;

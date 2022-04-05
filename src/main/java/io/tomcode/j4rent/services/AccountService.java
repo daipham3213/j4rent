@@ -147,13 +147,20 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public UserInfo getCurrentAccount() {
+    public Account getCurrentAccount() {
         Authentication authentication = getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
-            return modelMapper.map(getAccountByUsername(currentUserName), UserInfo.class);
+            return getAccountByUsername(currentUserName);
         }
         return null;
+    }
+
+    @Override
+    public UserInfo getCurrentUserInfo() {
+        Account account = getCurrentAccount();
+        if (account == null) return null;
+        return modelMapper.map(account, UserInfo.class);
     }
 
     private Account populateAccount(Account account) {

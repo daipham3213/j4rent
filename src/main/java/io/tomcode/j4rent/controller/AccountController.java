@@ -3,14 +3,13 @@ package io.tomcode.j4rent.controller;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.services.IAccountService;
-import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.mapper.*;
 
-import liquibase.pro.packaged.U;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;;
+;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/account")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class AccountController {
-
     private final IAccountService accountService;
 
     public AccountController(IAccountService accountService) {
@@ -28,7 +26,8 @@ public class AccountController {
 
     @GetMapping("/")
     public ResponseEntity<UserInfo> currentUser() {
-        return new ResponseEntity<>(accountService.getCurrentAccount(), HttpStatus.OK);
+        UserInfo account = accountService.getCurrentUserInfo();
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
 

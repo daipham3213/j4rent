@@ -9,7 +9,7 @@ import liquibase.pro.packaged.P;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import  org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Pageable;
 
 @Component
 public interface IPostService {
@@ -17,10 +17,13 @@ public interface IPostService {
 
     Page<PostDetails> getAllPost(Pageable page);
 
-    Page<PostDetails> getAllPost(Pageable page, int mix , int max);
+    Page<PostDetails> getAllPost(Pageable page, int min, int max);
 
-    Page<PostDetails> getAllPost(Pageable page, int floorArea );
+    Page<PostDetails> getAllPost(Pageable page, int floorArea);
 
+    Page<PostDetails> getCreatedPosts(Pageable page);
 
+    Page<PostDetails> getCreatedPosts(Pageable page, int min, int max);
 
+    Page<PostDetails> getCreatedPosts(Pageable page, int floorArea);
 }
