@@ -6,10 +6,13 @@ import io.tomcode.j4rent.mapper.AlbumCreate;
 import io.tomcode.j4rent.mapper.AlbumView;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public interface IAlbumService {
 
-    Album createAlbum (AlbumCreate albumLoad) throws ImageFailException;
+    Album getAlbumById(UUID id);
 
-    Album createAlbum (AlbumView albumView) throws ImageFailException;
+    Album createAlbum (AlbumCreate albumCreate) throws ImageFailException;
+    
 }

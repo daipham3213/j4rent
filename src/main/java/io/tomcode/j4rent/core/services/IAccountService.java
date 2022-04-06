@@ -35,5 +35,6 @@ public interface IAccountService {
     JwtResponse authenticate(Login login);
 
     Account getCurrentAccount();
+
     UserInfo getCurrentUserInfo();
 }

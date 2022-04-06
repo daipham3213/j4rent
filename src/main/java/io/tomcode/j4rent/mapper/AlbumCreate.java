@@ -15,5 +15,5 @@ public class AlbumCreate {
 
     Boolean isHidden;
 
-    List<ImageCreate> imageLoadList;
+    List<ImageCreate> images;
 }

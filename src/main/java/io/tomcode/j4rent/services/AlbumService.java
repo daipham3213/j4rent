@@ -1,35 +1,39 @@
 package io.tomcode.j4rent.services;
 
 import io.tomcode.j4rent.core.entities.Album;
+import io.tomcode.j4rent.core.repositories.AlbumRepository;
 import io.tomcode.j4rent.core.services.IAlbumService;
+import io.tomcode.j4rent.core.services.IImageService;
 import io.tomcode.j4rent.exception.ImageFailException;
 import io.tomcode.j4rent.mapper.AlbumCreate;
-import io.tomcode.j4rent.mapper.AlbumView;
 import io.tomcode.j4rent.mapper.ImageCreate;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service("albumService")
 public class AlbumService implements IAlbumService {
 
-    private final ImageService imageService;
+    private final AlbumRepository albumRepository;
+    private final IImageService imageService;
 
-    public AlbumService(ImageService imageService) {
+    public AlbumService(AlbumRepository albumRepository, IImageService imageService) {
+        this.albumRepository = albumRepository;
         this.imageService = imageService;
+    }
+
+    @Override
+    public Album getAlbumById(UUID id) {
+        return albumRepository.getById(id);
     }
 
     @Override
     public Album createAlbum(AlbumCreate albumLoad) throws ImageFailException {
         Album album = new Album(albumLoad.getName(), albumLoad.getIsHidden());
-        for (ImageCreate imageLoad : albumLoad.getImageLoadList()) {
-            album.getImages().add(imageService.createImage(imageLoad));
+        for (ImageCreate image : albumLoad.getImages()) {
+            album.getImages().add(imageService.upload(image));
         }
         return album;
-
     }
 
-    @Override
-    public Album createAlbum(AlbumView albumView) throws ImageFailException {
-        Album album = new Album(albumView.getName(), albumView.getImageLoadList());
-        return album;
-    }
 }

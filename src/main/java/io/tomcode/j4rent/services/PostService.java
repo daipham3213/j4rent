@@ -11,10 +11,12 @@ import io.tomcode.j4rent.core.services.IAlbumService;
 import io.tomcode.j4rent.core.services.IDocumentService;
 import io.tomcode.j4rent.core.services.IPostService;
 import io.tomcode.j4rent.exception.ImageFailException;
+import io.tomcode.j4rent.exception.LatitudeException;
+import io.tomcode.j4rent.exception.LongitudeException;
+import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
-import liquibase.pro.packaged.f;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,12 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public void createPost(PostDetails postDetails) throws ImageFailException {
-        Document document = documentService.createDocument("post", postDetails);
-        documentService.createDocument(document);
-        Album album = albumService.createAlbum(postDetails.getAlbum());
-        Post post = new Post(postDetails);
+    public void createPost(PostCreate postCreate) throws ImageFailException {
+        Album album = albumService.createAlbum(postCreate.getAlbum());
+        Post post = new Post(postCreate);
         post.setAlbum(album);
+        Document document = documentService.createDocument("post", post);
+        documentService.createDocument(document);
         postRepository.save(post);
     }
 
@@ -107,13 +109,24 @@ public class PostService implements IPostService {
         return new PageImpl<>(results, page, page.getPageSize());
     }
 
+    @Override
+    public Post getPostById(UUID id){
+        return postRepository.findPostById(id);
+    }
 
-//    public void checkFormatPost(PostDetails postDetails) throws LatitudeException, LongitudeException {
-//        if (!NumberUtils.isParsable("" + postDetails.getLatitude()))
-//            throw new LatitudeException();
-//        if (!NumberUtils.isParsable("" + postDetails.getLongitude()))
-//            throw new LongitudeException();
-//    }
+
+    public void checkFormatPost(PostCreate post) throws LatitudeException, LongitudeException {
+//        Object postDetails;
+        if (!NumberUtils.isParsable(String.valueOf(post.getLatitude())))
+            throw new LatitudeException();
+        if (!NumberUtils.isParsable(String.valueOf(post.getLongitude())))
+            throw new LongitudeException();
+        if (!NumberUtils.isParsable(String.valueOf(post.getFloorArea())))
+            throw new LatitudeException();
+        if (!NumberUtils.isParsable(String.valueOf(post.getPrice())))
+            throw new LongitudeException();
+
+    }
 
 
 }

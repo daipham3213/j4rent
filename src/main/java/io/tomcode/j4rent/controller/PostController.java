@@ -2,7 +2,7 @@ package io.tomcode.j4rent.controller;
 
 import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IPostService;
-import io.tomcode.j4rent.mapper.PostResult;
+import io.tomcode.j4rent.mapper.PostCreate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import io.tomcode.j4rent.mapper.PostDetails;
@@ -21,15 +21,13 @@ import org.springframework.data.domain.Pageable;
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class PostController {
     private final IPostService postService;
-    private final IAccountService accountService;
 
     public PostController(IPostService postService, IAccountService accountService) {
         this.postService = postService;
-        this.accountService = accountService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseResult> create(@RequestBody PostDetails post) {
+    public ResponseEntity<ResponseResult> create(@RequestBody PostCreate post) {
         try {
             postService.createPost(post);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, null, "Post created!"), HttpStatus.OK);
@@ -38,37 +36,24 @@ public class PostController {
         }
     }
 
-//    @GetMapping("/created")
-//    public ResponseEntity<ResponseResult> getCreatedPosts(
-//            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-//            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-//            @RequestParam(name = "sort", defaultValue = "") String sortBy,
-//            @RequestParam(name = "floorArea", required = false, defaultValue = "0") int floorArea,
-//            @RequestParam(name = "mix", required = false, defaultValue = "0") int mix,
-//            @RequestParam(name = "max", required = false, defaultValue = "300000") int max
-//    ) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<PostDetails> allPosts = postService.getCreatedPosts(pageable);
-//        return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, null, allPosts), HttpStatus.OK);
-//    }
-
     @GetMapping("/created")
     public ResponseEntity<ResponseResult> getCreatedPosts(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "floorArea", required = false, defaultValue = "0") int floorArea,
-            @RequestParam(name = "mix_price", required = false, defaultValue = "0") int mix_price,
-            @RequestParam(name = "max_price", required = false, defaultValue = "300000") int max_price) {
+            @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "300000") int maxPrice) {
         try {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
-            Page<PostDetails> allPost = postService.getCreatedPosts(pageable);
-            if (mix_price != 0 || max_price != 300000 || floorArea != 0) {
+            Page<PostDetails> allPost;
+            if (minPrice != 0 || maxPrice != 300000 || floorArea != 0) {
                 if (floorArea == 0) floorArea = 500;
-                if (max_price == 300000 && mix_price == 0) max_price = 5000000;
+                if (maxPrice == 300000 && minPrice == 0) maxPrice = 5000000;
 
-                allPost = postService.getCreatedPosts(pageable, floorArea, mix_price, max_price);
-            }
+                allPost = postService.getCreatedPosts(pageable, floorArea, minPrice, maxPrice);
+            } else allPost = postService.getCreatedPosts(pageable);
+
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", allPost), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -77,21 +62,20 @@ public class PostController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseResult> a(
+    public ResponseEntity<ResponseResult> getAll(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(name = "floorArea", required = false, defaultValue = "0") int floorArea,
-            @RequestParam(name = "mix_price", required = false, defaultValue = "0") int mix_price,
-            @RequestParam(name = "max_price", required = false, defaultValue = "300000") int max_price) {
+            @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
+            @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "300000") int maxPrice) {
         try {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
             Page<PostDetails> allPost = postService.getAllPost(pageable);
-            if (mix_price != 0 || max_price != 300000 || floorArea != 0) {
-                if (floorArea == 0) floorArea = 500;
-                if (max_price == 300000 && mix_price == 0) max_price = 5000000;
+            if (minPrice != 0 || maxPrice != 300000 || floorArea != 500) {
+                if (maxPrice == 300000 && minPrice == 0) maxPrice = 5000000;
 
-                allPost = postService.getAllPost(pageable,floorArea ,mix_price, max_price);
+                allPost = postService.getAllPost(pageable, floorArea, minPrice, maxPrice);
             }
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", allPost), HttpStatus.OK);
         } catch (Exception e) {

@@ -8,11 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ImageView {
 
     private String title;
 
     private String file;
-
 }

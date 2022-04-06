@@ -55,7 +55,7 @@ public class ImageController {
             if (bi == null) {
                 throw new ImageFailException();
             }
-            imageService.upImage(imageUp);
+            imageService.upload(imageUp);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "sent img"), HttpStatus.OK);
         } catch (Exception e) {
             throw new ImageFailException();

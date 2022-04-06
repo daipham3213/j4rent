@@ -1,5 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
+import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
@@ -46,7 +47,7 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
     public Post(PostDetails postDetails) {
@@ -55,8 +56,18 @@ public class Post extends BaseEntity {
         this.latitude = postDetails.getLatitude();
         this.longitude = postDetails.getLongitude();
         this.price = postDetails.getPrice();
-        this.floorArea=postDetails.getFloorArea();
-        this.address=postDetails.getAddress();
+        this.floorArea = postDetails.getFloorArea();
+        this.address = postDetails.getAddress();
         this.furnitureStatus = postDetails.getFurnitureStatus();
+    }
+
+    public Post(PostCreate postCreate) {
+        this.content = postCreate.getContent();
+        this.latitude = postCreate.getLatitude();
+        this.longitude = postCreate.getLongitude();
+        this.price = postCreate.getPrice();
+        this.floorArea = postCreate.getFloorArea();
+        this.address = postCreate.getAddress();
+        this.furnitureStatus = postCreate.getFurnitureStatus();
     }
 }

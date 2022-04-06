@@ -8,7 +8,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "Role")
@@ -22,7 +24,7 @@ public class Role extends BaseEntity implements GrantedAuthority {
     private String name;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     Set<Account> accounts = new HashSet<>();
 
     public Role(String role) {
@@ -33,4 +35,6 @@ public class Role extends BaseEntity implements GrantedAuthority {
     public String getAuthority() {
         return getId().toString();
     }
+
+
 }

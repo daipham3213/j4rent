@@ -22,7 +22,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     List<Post> findByFloorAreaLessThanEqualAndPriceBetween(float floorArea, double priceStart, double priceEnd, Pageable pageable);
 
-
+    Post findPostById(UUID id);
 
 
 }
