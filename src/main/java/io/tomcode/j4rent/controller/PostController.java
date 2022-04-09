@@ -39,20 +39,12 @@ public class PostController {
     public ResponseEntity<ResponseResult> getCreatedPosts(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(name = "floorArea", required = false, defaultValue = "0") int floorArea,
+            @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
             @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "300000") int maxPrice) {
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") int maxPrice) {
         try {
-
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
-            Page<PostDetails> allPost;
-            if (minPrice != 0 || maxPrice != 300000 || floorArea != 0) {
-                if (floorArea == 0) floorArea = 500;
-                if (maxPrice == 300000 && minPrice == 0) maxPrice = 5000000;
-
-                allPost = postService.getCreatedPosts(pageable, floorArea, minPrice, maxPrice);
-            } else allPost = postService.getCreatedPosts(pageable);
-
+            Page<PostDetails> allPost = postService.getCreatedPosts(pageable, floorArea, minPrice, maxPrice);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", allPost), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -66,16 +58,11 @@ public class PostController {
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
             @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "300000") int maxPrice) {
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") int maxPrice) {
         try {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
             Page<PostDetails> allPost = postService.getAllPost(pageable);
-            if (minPrice != 0 || maxPrice != 300000 || floorArea != 500) {
-                if (maxPrice == 300000 && minPrice == 0) maxPrice = 5000000;
-
-                allPost = postService.getAllPost(pageable, floorArea, minPrice, maxPrice);
-            }
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", allPost), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

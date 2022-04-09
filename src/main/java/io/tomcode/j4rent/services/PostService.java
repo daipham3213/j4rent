@@ -2,6 +2,7 @@ package io.tomcode.j4rent.services;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Album;
+import io.tomcode.j4rent.core.entities.Comment;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.PostRepository;
 import io.tomcode.j4rent.core.services.*;
@@ -29,15 +30,14 @@ public class PostService implements IPostService {
     private final IAlbumService albumService;
     private final IDocumentService documentService;
     private final IAccountService accountService;
-    private final ICommentService commentService;
 
-    public PostService(PostRepository postRepository, ModelMapper modelMapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService, ICommentService commentService) {
+
+    public PostService(PostRepository postRepository, ModelMapper modelMapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.albumService = albumService;
         this.documentService = documentService;
         this.accountService = accountService;
-        this.commentService = commentService;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class PostService implements IPostService {
         Post post = new Post(postCreate);
         post.setAlbum(album);
         documentService.createDocument("post", postRepository.save(post));
-        return modelMapper.map(post,PostView.class);
+        return modelMapper.map(post, PostView.class);
 
     }
 
@@ -73,7 +73,6 @@ public class PostService implements IPostService {
         }
         return new PageImpl<>(results, page, page.getPageSize());
     }
-
 
 
     @Override
@@ -108,28 +107,46 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Post getPostById(UUID id){
+    public Post getPostById(UUID id) {
         return postRepository.findPostById(id);
     }
 
 
     public void checkFormatPost(PostCreate post) throws LatitudeException, LongitudeException, FloorAreaIncorrectValue, PriceIncorrectValue {
-//        Object postDetails;
         if (!NumberUtils.isParsable(String.valueOf(post.getLatitude())))
             throw new LatitudeException();
         if (!NumberUtils.isParsable(String.valueOf(post.getLongitude())))
             throw new LongitudeException();
-        if (post.getFloorArea()<=0)
+        if (post.getFloorArea() <= 0)
             throw new FloorAreaIncorrectValue();
-        if (post.getPrice()<=0)
+        if (post.getPrice() <= 0)
             throw new PriceIncorrectValue();
 
     }
 
-    public PostDetails convert(Post post) throws IdNotFound {
+    public PostDetails convert(Post post) {
+        int count = Math.toIntExact(postRepository.countCommentInPost(post));
+        List<UUID> list = postRepository.findCommentInPost(post);
+        for (UUID uuid : list) {
+            count += sumComment(uuid);
+        }
         PostDetails details = modelMapper.map(post, PostDetails.class);
-        details.setSumComment(Math.toIntExact(commentService.countComment(post)));
+        details.setSumComment(count);
         return details;
+    }
+
+
+    public int sumComment(UUID uuid) {
+        int result = 0;
+        List<UUID> list = postRepository.findComment(uuid);
+        for (UUID child : list) {
+            result++;
+            List<UUID> childList = postRepository.findComment(child);
+            if (childList.size() > 0) {
+                result += sumComment(child);
+            }
+        }
+        return result;
     }
 
 

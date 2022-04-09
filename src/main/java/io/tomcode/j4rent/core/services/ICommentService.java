@@ -19,6 +19,5 @@ public interface ICommentService {
 
     Page<CommentCreate> getComments(Pageable page,UUID uuid) throws IdNotFound;
 
-    Long countComment (Post post) throws IdNotFound;
 
 }
