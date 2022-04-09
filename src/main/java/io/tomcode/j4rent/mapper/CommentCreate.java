@@ -12,5 +12,6 @@ import java.util.UUID;
 public class CommentCreate {
     UUID id;
 
-    String content;
+    String contents;
+
 }

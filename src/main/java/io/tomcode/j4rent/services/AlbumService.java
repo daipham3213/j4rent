@@ -24,7 +24,7 @@ public class AlbumService implements IAlbumService {
 
     @Override
     public Album getAlbumById(UUID id) {
-        return albumRepository.getById(id);
+        return albumRepository.getAlbumById(id);
     }
 
     @Override

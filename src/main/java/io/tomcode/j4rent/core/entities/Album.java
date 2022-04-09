@@ -23,7 +23,7 @@ public class Album extends BaseEntity {
     @Column(name = "is_hidden")
     private Boolean isHidden;
 
-    @OneToMany(mappedBy = "album", orphanRemoval = true)
+    @OneToMany(mappedBy = "album")
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "album", orphanRemoval = true)

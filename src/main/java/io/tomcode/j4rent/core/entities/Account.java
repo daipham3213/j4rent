@@ -58,6 +58,7 @@ public class Account extends BaseEntity implements UserDetails {
     @JoinColumn(name = "role_id")
     private  Role role;
 
+
     @OneToMany(mappedBy = "createdById", orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Album> albums = new ArrayList<>();
 

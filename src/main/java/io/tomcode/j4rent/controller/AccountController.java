@@ -3,10 +3,8 @@ package io.tomcode.j4rent.controller;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.services.IAccountService;
-import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.mapper.*;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

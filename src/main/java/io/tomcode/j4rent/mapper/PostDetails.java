@@ -35,6 +35,8 @@ public class PostDetails {
 
     private AlbumView album;
 
-    private List<Comment> comments;
+    private int sumComment;
+
+//    private List<CommentCreate> comments;
 
 }

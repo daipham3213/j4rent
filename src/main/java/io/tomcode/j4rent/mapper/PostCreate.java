@@ -30,6 +30,4 @@ public class PostCreate {
     private Date createdDate;
 
     private AlbumCreate album;
-
-    private List<Comment> comments;
 }

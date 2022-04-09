@@ -9,14 +9,14 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "permission")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 public class Permission extends BaseEntity {
-   private String name;
+    @Column(name = "name")
+    private String name;
 
     @ManyToMany
     @JoinTable(name = "permission_roles",

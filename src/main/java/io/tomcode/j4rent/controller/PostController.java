@@ -29,8 +29,7 @@ public class PostController {
     @PostMapping("/create")
     public ResponseEntity<ResponseResult> create(@RequestBody PostCreate post) {
         try {
-            postService.createPost(post);
-            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, null, "Post created!"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, null, postService.createPost(post)), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
