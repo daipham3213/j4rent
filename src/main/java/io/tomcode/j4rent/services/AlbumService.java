@@ -33,6 +33,7 @@ public class AlbumService implements IAlbumService {
         for (ImageCreate image : albumLoad.getImages()) {
             album.getImages().add(imageService.upload(image));
         }
+        albumRepository.save(album);
         return album;
     }
 
