@@ -4,11 +4,9 @@ import io.tomcode.j4rent.core.entities.Comment;
 import io.tomcode.j4rent.core.services.ICommentService;
 import io.tomcode.j4rent.mapper.CommentCreate;
 import io.tomcode.j4rent.mapper.ResponseResult;
-import liquibase.pro.packaged.E;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/comment")
-@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
+//@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class CommentController {
     private  final ICommentService commentService;
 
@@ -50,6 +48,15 @@ public class CommentController {
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseResult> updateComment(@RequestBody CommentCreate comment){
+        try {
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", commentService.updateComment(comment)), HttpStatus.OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 }

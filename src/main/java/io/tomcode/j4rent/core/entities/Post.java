@@ -47,6 +47,7 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
+
     @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 

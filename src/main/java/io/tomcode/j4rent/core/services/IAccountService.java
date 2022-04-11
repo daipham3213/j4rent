@@ -2,10 +2,7 @@ package io.tomcode.j4rent.core.services;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.OTP;
-import io.tomcode.j4rent.exception.EmailExistsException;
-import io.tomcode.j4rent.exception.InvalidOTPException;
-import io.tomcode.j4rent.exception.PhoneNumberExistsException;
-import io.tomcode.j4rent.exception.UsernameExistsException;
+import io.tomcode.j4rent.exception.*;
 import io.tomcode.j4rent.mapper.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -37,4 +34,6 @@ public interface IAccountService {
     Account getCurrentAccount();
 
     UserInfo getCurrentUserInfo();
+
+    UserInfo updateUser(UserInfo info) throws IdNotFound;
 }

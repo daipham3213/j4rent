@@ -9,11 +9,13 @@ import io.tomcode.j4rent.core.services.*;
 import io.tomcode.j4rent.exception.*;
 import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
+import io.tomcode.j4rent.mapper.PostUpdate;
 import io.tomcode.j4rent.mapper.PostView;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.oauth2.jwt.SupplierJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
@@ -59,7 +61,6 @@ public class PostService implements IPostService {
             results.add(convert(post));
         }
         return new PageImpl<>(results, page, page.getPageSize());
-
     }
 
     @Override
@@ -72,6 +73,22 @@ public class PostService implements IPostService {
 
         }
         return new PageImpl<>(results, page, page.getPageSize());
+    }
+
+    @Override
+    public Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max, double la, double lo, double distance) throws IdNotFound {
+        List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
+        List<PostDetails> results = new ArrayList<>();
+        for (Post post : posts
+        ) {
+            if (distance(la, lo, post.getLatitude(), post.getLongitude()) <= distance && la != 0 && lo != 0) {
+                results.add(convert(post));
+            }
+        }
+        Page<PostDetails> post = new PageImpl<>(results, page, page.getPageSize());
+        if (results != null)
+            post = getAllPost(page, floorArea, min, max);
+        return post;
     }
 
 
@@ -107,16 +124,47 @@ public class PostService implements IPostService {
     }
 
     @Override
+    public PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFound {
+        checkFormatPost(post);
+        Account account = accountService.getCurrentAccount();
+        Post updatePost = postRepository.findPostById(post.getId());
+        if (account.getId().equals(updatePost.getCreatedById())) {
+            updatePost.setContent(post.getContent());
+            updatePost.setLatitude(post.getLatitude());
+            updatePost.setLongitude(post.getLongitude());
+            updatePost.setPrice(post.getPrice());
+            updatePost.setFloorArea(post.getFloorArea());
+            updatePost.setFurnitureStatus(post.getFurnitureStatus());
+            if (post.getAlbum() != null) {
+                Album updateAlbum = albumService.getAlbumById(updatePost.getAlbum().getId());
+                if (updateAlbum != null) {
+                    albumService.updateAlbum(new AlbumUpdate(updateAlbum, post.getAlbum()));
+                } else
+                    albumService.createAlbum(post.getAlbum());
+            }
+            return modelMapper.map(updatePost, PostDetails.class);
+        } else throw new UserPostsNotFound();
+
+    }
+
+    @Override
     public Post getPostById(UUID id) {
         return postRepository.findPostById(id);
     }
-
 
     public void checkFormatPost(PostCreate post) throws LatitudeException, LongitudeException, FloorAreaIncorrectValue, PriceIncorrectValue {
         if (!NumberUtils.isParsable(String.valueOf(post.getLatitude())))
             throw new LatitudeException();
         if (!NumberUtils.isParsable(String.valueOf(post.getLongitude())))
             throw new LongitudeException();
+        if (post.getFloorArea() <= 0)
+            throw new FloorAreaIncorrectValue();
+        if (post.getPrice() <= 0)
+            throw new PriceIncorrectValue();
+
+    }
+
+    public void checkFormatPost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue {
         if (post.getFloorArea() <= 0)
             throw new FloorAreaIncorrectValue();
         if (post.getPrice() <= 0)
@@ -135,7 +183,6 @@ public class PostService implements IPostService {
         return details;
     }
 
-
     public int sumComment(UUID uuid) {
         int result = 0;
         List<UUID> list = postRepository.findComment(uuid);
@@ -149,5 +196,13 @@ public class PostService implements IPostService {
         return result;
     }
 
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+        lat1 = Math.toRadians(lat1);
+        lon1 = Math.toRadians(lon1);
+        lat2 = Math.toRadians(lat2);
+        lon2 = Math.toRadians(lon2);
+        double earthRadius = 6371.01; //Kilometers
+        return earthRadius * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+    }
 
 }

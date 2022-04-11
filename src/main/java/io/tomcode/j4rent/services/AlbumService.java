@@ -24,13 +24,23 @@ public class AlbumService implements IAlbumService {
 
     @Override
     public Album getAlbumById(UUID id) {
-        return albumRepository.getAlbumById(id);
+        return albumRepository.findAlbumById(id);
     }
 
     @Override
     public Album createAlbum(AlbumCreate albumLoad) throws ImageFailException {
         Album album = new Album(albumLoad.getName(), albumLoad.getIsHidden());
         for (ImageCreate image : albumLoad.getImages()) {
+            album.getImages().add(imageService.upload(image));
+        }
+        albumRepository.save(album);
+        return album;
+    }
+
+    @Override
+    public Album updateAlbum(AlbumUpdate albumUpdate) throws ImageFailException {
+        Album album = albumUpdate.getAlbum();
+        for (ImageCreate image : albumUpdate.albumCreate.getImages()) {
             album.getImages().add(imageService.upload(image));
         }
         albumRepository.save(album);

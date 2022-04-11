@@ -8,10 +8,7 @@ import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.core.entities.Role;
 import io.tomcode.j4rent.core.repositories.AccountRepository;
 import io.tomcode.j4rent.core.services.*;
-import io.tomcode.j4rent.exception.EmailExistsException;
-import io.tomcode.j4rent.exception.InvalidOTPException;
-import io.tomcode.j4rent.exception.PhoneNumberExistsException;
-import io.tomcode.j4rent.exception.UsernameExistsException;
+import io.tomcode.j4rent.exception.*;
 import io.tomcode.j4rent.mapper.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -161,6 +158,21 @@ public class AccountService implements IAccountService, UserDetailsService {
         Account account = getCurrentAccount();
         if (account == null) return null;
         return modelMapper.map(account, UserInfo.class);
+    }
+
+    @Override
+    public UserInfo updateUser(UserInfo info) throws IdNotFound {
+        Account account = getCurrentAccount();
+        if (account!= null){
+            account.setUsername(info.getUsername());
+            account.setFirstName(info.getFirstName());
+            account.setLastName(info.getLastName());
+            account.setDob(info.getDob());
+            account.setIdCard(info.getIdCard());
+            account.setGender(info.getGender());
+            return modelMapper.map(account, UserInfo.class);
+        }
+        else throw new IdNotFound();
     }
 
     private Account populateAccount(Account account) {

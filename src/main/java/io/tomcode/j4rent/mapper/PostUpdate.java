@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostCreate {
+public class PostUpdate {
+    private UUID id;
 
     private String content;
 
@@ -24,8 +25,6 @@ public class PostCreate {
     private String address;
 
     private String furnitureStatus;
-
-    private Date createdDate;
 
     private AlbumCreate album;
 }

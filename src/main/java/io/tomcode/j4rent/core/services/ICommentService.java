@@ -19,5 +19,5 @@ public interface ICommentService {
 
     Page<CommentCreate> getComments(Pageable page,UUID uuid) throws IdNotFound;
 
-
+    CommentCreate updateComment (CommentCreate commentCreate) throws IdNotFound;
 }

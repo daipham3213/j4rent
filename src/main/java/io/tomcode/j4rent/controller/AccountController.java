@@ -74,4 +74,14 @@ public class AccountController {
         JwtResponse response = accountService.authenticate(login);
         return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", response), HttpStatus.OK);
     }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<ResponseResult> login(@RequestBody UserInfo info) {
+        try {
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateUser(info)), HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }
