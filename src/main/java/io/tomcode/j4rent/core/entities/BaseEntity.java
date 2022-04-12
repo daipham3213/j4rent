@@ -45,12 +45,12 @@ public abstract class BaseEntity  {
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdDate;
+    private Date createdAt;
 
-    @Column(name = "modified_at")
+    @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    private Date modifiedDate;
+    private Date updatedAt;
 
     @Column(name = "created_by_id")
     @CreatedBy

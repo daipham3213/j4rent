@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +17,9 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     List<Post> findByCreatedByIdEquals(UUID createdById, Pageable pageable);
 
-    List<Post> findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(UUID createdById, float floorArea, double priceStart, double priceEnd, Pageable pageable);
+    List<Post> findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(UUID createdById, float floorArea, BigInteger price, BigInteger price2, Pageable page);
 
-    List<Post> findByFloorAreaLessThanEqualAndPriceBetween(float floorArea, double priceStart, double priceEnd, Pageable pageable);
+    List<Post> findByFloorAreaLessThanEqualAndPriceBetween(float floorArea, BigInteger priceStart, BigInteger priceEnd, Pageable pageable);
 
     Post findPostById(UUID id);
 
@@ -33,9 +34,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
 
     String HAVERSINE_PART = "(3956 * 2 * ASIN(SQRT( POWER(SIN((:latitude - abs(p.latitude)) * pi()/180 / 2), 2) + COS(:longitude * pi()/180 ) * COS(abs(p.latitude) * pi()/180)  * POWER(SIN((:longitude - p.longitude) * pi()/180 / 2), 2) )))";
-//
     @Query(value = "select distinct p from Post p where p.price between :min and :max and p.floorArea between 0 and :floorArea and :distance >= " + HAVERSINE_PART+" ")
-    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea,@Param("min") double min,@Param("max") double max);
+    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea, @Param("min") BigInteger min, @Param("max") BigInteger max);
 }
-// @Query(value = "select distinct  p  from  Post p where  and  p.price  between 150 and  300000000000")
-//

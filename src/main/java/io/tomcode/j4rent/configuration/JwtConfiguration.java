@@ -61,7 +61,7 @@ public class JwtConfiguration {
     @Bean
     public RSAPublicKey jwtValidationKey(KeyStore keyStore) {
         try {
-            Certificate certificate = (Certificate) keyStore.getCertificate(keyAlias);
+            Certificate certificate = keyStore.getCertificate(keyAlias);
             PublicKey publicKey = certificate.getPublicKey();
 
             if (publicKey instanceof RSAPublicKey) {

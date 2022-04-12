@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 @Data
@@ -12,13 +13,13 @@ import java.util.UUID;
 public class PostUpdate {
     private UUID id;
 
-    private String content;
+    private String contents;
 
     private double latitude;
 
     private double longitude;
 
-    private double price;
+    private BigInteger price;
 
     private float floorArea;
 
@@ -27,4 +28,5 @@ public class PostUpdate {
     private String furnitureStatus;
 
     private AlbumCreate album;
+
 }

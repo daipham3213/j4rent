@@ -3,9 +3,9 @@ package io.tomcode.j4rent.core.entities;
 import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.*;
 
 @AllArgsConstructor
@@ -16,22 +16,21 @@ import java.util.*;
 @Setter
 public class Post extends BaseEntity {
 
-    @NonNull
-    @Column(name = "content")
-    private String content;
+    @Column(name = "contents")
+    private String contents;
 
-    @NonNull
     @Column(name = "latitude")
     private double latitude;
 
-    @NonNull
     @Column(name = "longitude")
     private double longitude;
-    @NonNull
-    @Column(name = "price")
-    private double price;
 
-    @NonNull
+    @Column(name = "price")
+    private BigInteger price;
+
+    @Column(name = "views")
+    private BigInteger views;
+
     @Column(name = "floor_area")
     private float floorArea;
 
@@ -47,13 +46,16 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
+    @Column(name = "document_id")
+    private UUID documentId;
+
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
     public Post(PostDetails postDetails) {
         setId(postDetails.getId());
-        this.content = postDetails.getContent();
+        this.contents = postDetails.getContents();
         this.latitude = postDetails.getLatitude();
         this.longitude = postDetails.getLongitude();
         this.price = postDetails.getPrice();
@@ -63,7 +65,7 @@ public class Post extends BaseEntity {
     }
 
     public Post(PostCreate postCreate) {
-        this.content = postCreate.getContent();
+        this.contents = postCreate.getContents();
         this.latitude = postCreate.getLatitude();
         this.longitude = postCreate.getLongitude();
         this.price = postCreate.getPrice();

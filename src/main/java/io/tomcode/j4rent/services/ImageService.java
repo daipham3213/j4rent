@@ -24,7 +24,7 @@ public class ImageService implements IImageService {
     @Override
     public Image upload(ImageCreate file) throws ImageFailException {
         try {
-            Map<String, Object> uploadResult = cloudinaryService.upload(file.getFile());
+            Map uploadResult = cloudinaryService.upload(file.getFile());
             Image image = new Image(file.getTitle(), (String) uploadResult.get("url"));
             return imageRepository.save(image);
         } catch (Exception e) {

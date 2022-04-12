@@ -32,8 +32,10 @@ public class Document extends BaseEntity {
     @Column(name = "data", columnDefinition = "jsonb")
     private JsonNode data;
 
+    @Column(name = "is_workflow")
     private boolean isWorkflow;
 
+    @Column(name = "is_otp")
     private boolean isOTP;
 
     @OneToMany(mappedBy = "document", orphanRemoval = true)
