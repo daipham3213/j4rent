@@ -1,5 +1,6 @@
 package io.tomcode.j4rent.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IPostService;
 import io.tomcode.j4rent.mapper.*;
@@ -13,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.data.domain.Pageable;
 
-//@SecurityRequirement(name = "api4rent")
+@SecurityRequirement(name = "javainuseapi")
 @RestController
 @RequestMapping("/post")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
@@ -88,7 +89,7 @@ public class PostController {
         }
     }
 
-    @PutMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<ResponseResult> updatePost(@RequestBody PostUpdate post) {
 
         try {

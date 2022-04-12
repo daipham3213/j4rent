@@ -58,7 +58,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max) throws IdNotFound {
+    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max) {
         List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
         List<PostDetails> results = new ArrayList<>();
         for (Post post : posts) {
@@ -69,9 +69,7 @@ public class PostService implements IPostService {
 
     @Override
     public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFound {
-//        List<Post> posts = postRepository.findPostsByCoordinates(distance,latitude,longitude, floorArea, min, max);
-        List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
-        Account account = accountService.getCurrentAccount();
+        List<Post> posts = postRepository.findPostsByCoordinates(distance,latitude,longitude, floorArea, min, max);
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
             for (Post post: posts) {

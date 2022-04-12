@@ -51,7 +51,7 @@ public class CommentController {
         }
     }
 
-    @PutMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<ResponseResult> updateComment(@RequestBody CommentCreate comment){
         try {
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", commentService.updateComment(comment)), HttpStatus.OK);

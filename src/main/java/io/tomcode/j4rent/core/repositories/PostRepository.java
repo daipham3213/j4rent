@@ -32,10 +32,10 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<UUID> findComment(@Param("id") UUID uuid);
 
 
-//    String HAVERSINE_PART = "";
+    String HAVERSINE_PART = "(3956 * 2 * ASIN(SQRT( POWER(SIN((:latitude - abs(p.latitude)) * pi()/180 / 2), 2) + COS(:longitude * pi()/180 ) * COS(abs(p.latitude) * pi()/180)  * POWER(SIN((:longitude - p.longitude) * pi()/180 / 2), 2) )))";
 //
-//    @Query(value = "select distinct p from Post p where p.price between :min and :max and p.floorArea between 0 and :floorArea ")
-//    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea,@Param("min") double min,@Param("max") double max);
+    @Query(value = "select distinct p from Post p where p.price between :min and :max and p.floorArea between 0 and :floorArea and :distance >= " + HAVERSINE_PART+" ")
+    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea,@Param("min") double min,@Param("max") double max);
 }
 // @Query(value = "select distinct  p  from  Post p where  and  p.price  between 150 and  300000000000")
 //
