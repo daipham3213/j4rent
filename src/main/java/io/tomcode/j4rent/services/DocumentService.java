@@ -53,7 +53,7 @@ public class DocumentService implements IDocumentService {
             document.setDocumentCode(documentCode);
             document.setData(json);
             document.setWorkflow(false);
-            document.setOTP(true);
+            document.setRegister(true);
             return documentRepository.save(document);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -94,18 +94,16 @@ public class DocumentService implements IDocumentService {
 
     @Override
     public void deleteOTPAndDocument(UUID uuid) {
-        List<Document> list = documentRepository.findByCreatedByIdIsAndDocumentCodeEquals(uuid,"ACCOUNT");
-        for ( Document document: list) {
-            otpService.cleanOTP(document.getId());
-        }
-        documentRepository.deleteAllByCreatedByIdAndDocumentCode(uuid,"ACCOUNT");
+        Document document = documentRepository.findDocumentById(uuid);
+        otpService.cleanOTP(document.getId());
+        documentRepository.deleteById(document.getId());
     }
 
     @Override
     public void updateCreatedByDocument(UUID idDocument, UUID userId) {
-         Document document = documentRepository.findDocumentById(idDocument);
-         document.setCreatedById(userId);
-         documentRepository.save(document);
+        Document document = documentRepository.findDocumentById(idDocument);
+        document.setCreatedById(userId);
+        documentRepository.save(document);
     }
 
 

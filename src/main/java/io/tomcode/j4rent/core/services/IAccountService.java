@@ -15,13 +15,15 @@ public interface IAccountService {
 
     Iterable<Account> getAllAccount();
 
-    OTP register(Register account);
+    OTP register(Register account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException;
 
     void verify(int otp) throws InvalidOTPException;
 
-    UserInfo createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException;
+    UserInfo createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException, IdCardExistsException;
 
     Boolean checkAccountExists(Register register) throws UsernameExistsException, PhoneNumberExistsException, EmailExistsException;
+
+    void checkUserInfo(CreateAccount account) throws IdCardExistsException;
 
     Authentication getAuthentication();
 
@@ -35,5 +37,5 @@ public interface IAccountService {
 
     UserInfo getCurrentUserInfo();
 
-    UserInfo updateUser(UserInfo info) throws IdNotFound;
+    UserInfo updateUser(UserInfo info) throws IdNotFoundException;
 }

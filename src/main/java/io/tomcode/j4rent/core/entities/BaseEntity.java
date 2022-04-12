@@ -38,9 +38,6 @@ public abstract class BaseEntity  {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "remarks")
-    private String remarks;
-
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)

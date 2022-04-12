@@ -21,10 +21,6 @@ public class Attachment  extends BaseEntity {
     private String caption;
 
     @ManyToOne
-    @JoinColumn(name = "message_id")
-    private Message message;
-
-//    @ManyToOne
-//    @JoinColumn(name = "message_id", nullable = false)
-//    private Message message_id;
+    @JoinColumn(name = "message_id", nullable = false)
+    private Message message_id;
 }

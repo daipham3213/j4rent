@@ -61,7 +61,8 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public OTP register(Register account) {
+    public OTP register(Register account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException {
+        checkAccountExists(account);
         Document document = documentService.createDocument("ACCOUNT", account);
         OTP otp = otpService.createOTP(document.getId());
         emailService.sendEmail(account.getEmail(), "This is the otp for authentication", " OTP : " + otp.getOtp());
@@ -77,7 +78,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public UserInfo createAccount(CreateAccount account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException, InvalidOTPException {
+    public UserInfo createAccount(CreateAccount account) throws InvalidOTPException, IdCardExistsException {
         OTP otp = otpService.getOTP(account.getOtp());
         Document document = documentService.getDocument(otp.getDocumentId());
         Register register = objectMapper.convertValue(document.getData(), Register.class);
@@ -85,10 +86,9 @@ public class AccountService implements IAccountService, UserDetailsService {
         info.setUsername(register.getUsername());
         info.setPhoneNumber(register.getPhoneNumber());
         info.setEmail(register.getEmail());
-        checkAccountExists(register);
-        Account newAccount = populateAccount(info);
-        documentService.updateCreatedByDocument(document.getId(),newAccount.getId());
-        documentService.deleteOTPAndDocument(newAccount.getId());
+        checkUserInfo(account);
+        populateAccount(info);
+        documentService.deleteOTPAndDocument(document.getId());
         return modelMapper.map(info, UserInfo.class);
     }
 
@@ -98,11 +98,18 @@ public class AccountService implements IAccountService, UserDetailsService {
             throw new UsernameExistsException();
         } else {
             if (accountRepository.findByEmailEquals(register.getEmail()) != null) {
-                throw new PhoneNumberExistsException();
-            } else if (accountRepository.findByPhoneNumberEquals(register.getPhoneNumber()) != null)
                 throw new EmailExistsException();
+            } else if (accountRepository.findByPhoneNumberEquals(register.getPhoneNumber()) != null)
+                throw new PhoneNumberExistsException();
         }
         return false;
+    }
+
+    @Override
+    public void checkUserInfo(CreateAccount account) throws IdCardExistsException {
+        if (accountRepository.findByIdCardEquals(account.getIdCard())!=null){
+            throw  new IdCardExistsException();
+        }
     }
 
     @Override
@@ -163,7 +170,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public UserInfo updateUser(UserInfo info) throws IdNotFound {
+    public UserInfo updateUser(UserInfo info) throws IdNotFoundException {
         Account account = getCurrentAccount();
         if (account!= null){
             account.setFirstName(info.getFirstName());
@@ -173,7 +180,7 @@ public class AccountService implements IAccountService, UserDetailsService {
             account.setGender(info.getGender());
             return modelMapper.map(account, UserInfo.class);
         }
-        else throw new IdNotFound();
+        else throw new IdNotFoundException();
     }
 
     private Account populateAccount(Account account) {

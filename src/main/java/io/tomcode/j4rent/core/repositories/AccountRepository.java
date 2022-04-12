@@ -10,6 +10,7 @@ import java.util.UUID;
 @Repository
 public interface AccountRepository extends BaseRepository<Account, UUID> {
 
+    Account findByIdCardEquals(String idCard);
 
     Account findAccountByUsername(String userName);
 

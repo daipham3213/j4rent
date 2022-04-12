@@ -31,16 +31,19 @@ public class Document extends BaseEntity {
     @Type(type = "jsonb")
     @Column(name = "data", columnDefinition = "jsonb")
     private JsonNode data;
-
+    @Column(name = "is_workflow")
     private boolean isWorkflow;
+    @Column(name = "is_auth")
+    private boolean isAuth;
+    @Column(name = "is_register")
+    private boolean isRegister;
 
-    private boolean isOTP;
 
     @OneToMany(mappedBy = "document", orphanRemoval = true)
     private List<Workflow> workflows = new ArrayList<>();
 
     public Document(DocumentCreate document) {
         this.documentCode = document.getDocumentCode();
-        this.data= document.getData();
+        this.data = document.getData();
     }
 }

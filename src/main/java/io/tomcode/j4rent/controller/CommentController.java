@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/comment")
-//@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
+@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class CommentController {
     private  final ICommentService commentService;
 

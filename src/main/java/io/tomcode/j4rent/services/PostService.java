@@ -48,7 +48,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page) throws IdNotFound {
+    public Page<PostDetails> getAllPost(Pageable page) throws IdNotFoundException {
         List<Post> posts = postRepository.findAll(page).getContent();
         ArrayList<PostDetails> results = new ArrayList<>();
         for (Post post : posts) {
@@ -68,7 +68,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFound {
+    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFoundException {
         List<Post> posts = postRepository.findPostsByCoordinates(distance,latitude,longitude, floorArea, min, max);
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
@@ -82,10 +82,10 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFound {
+    public Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFoundException {
         Account account = accountService.getCurrentAccount();
         if (account == null)
-            throw new IdNotFound();
+            throw new IdNotFoundException();
         else {
             List<Post> posts = postRepository.findByCreatedByIdEquals(account.getId(), page);
             ArrayList<PostDetails> results = new ArrayList<>();
@@ -98,10 +98,10 @@ public class PostService implements IPostService {
 
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, double min, double max) throws IdNotFound {
+    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, double min, double max) throws IdNotFoundException {
         Account account = accountService.getCurrentAccount();
         if (account == null)
-            throw new IdNotFound();
+            throw new IdNotFoundException();
         else {
             List<Post> posts = postRepository.findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(account.getId(), floorArea, Double.valueOf(min), Double.valueOf(max), page);
             ArrayList<PostDetails> results = new ArrayList<>();
@@ -113,12 +113,12 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFound {
+    public PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFoundException {
         checkFormatPost(post);
         Account account = accountService.getCurrentAccount();
         Post updatePost = postRepository.findPostById(post.getId());
         if (account.getId().equals(updatePost.getCreatedById())) {
-            updatePost.setContent(post.getContent());
+            updatePost.setContents(post.getContent());
             updatePost.setLatitude(post.getLatitude());
             updatePost.setLongitude(post.getLongitude());
             updatePost.setPrice(post.getPrice());
@@ -132,7 +132,7 @@ public class PostService implements IPostService {
                     albumService.createAlbum(post.getAlbum());
             }
             return modelMapper.map(updatePost, PostDetails.class);
-        } else throw new UserPostsNotFound();
+        } else throw new UserPostsNotFoundException();
 
     }
 

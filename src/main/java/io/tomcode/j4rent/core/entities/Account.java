@@ -38,6 +38,9 @@ public class Account extends BaseEntity implements UserDetails {
     @Column(name = "id_card", length = 15, unique = true)
     private String idCard;
 
+    @Column(name = "avatar",length = 100, unique = true)
+    private String avatar;
+
     @Column(length = 10, columnDefinition = "VARCHAR(10) DEFAULT 'male'")
     private String gender;
 

@@ -17,6 +17,6 @@ public class Member extends BaseEntity {
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "conversation_id")
+    @JoinColumn(name = "thead_id")
     private Conversation conversation;
 }

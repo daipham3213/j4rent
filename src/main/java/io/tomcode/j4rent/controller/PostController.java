@@ -1,6 +1,11 @@
 package io.tomcode.j4rent.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IPostService;
 import io.tomcode.j4rent.mapper.*;
@@ -33,6 +38,8 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+
 
     @GetMapping("/created")
     public ResponseEntity<ResponseResult> getCreatedPosts(

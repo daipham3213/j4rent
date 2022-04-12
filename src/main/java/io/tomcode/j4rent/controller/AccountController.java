@@ -40,7 +40,6 @@ public class AccountController {
     @PostMapping("/register")
     public ResponseEntity<ResponseResult> register(@RequestBody Register register) {
         try {
-            accountService.checkAccountExists(register);
             accountService.register(register);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "OTP sent"), HttpStatus.OK);
         } catch (Exception e) {
