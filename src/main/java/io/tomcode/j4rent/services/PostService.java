@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page) throws IdNotFoundException {
+    public Page<PostDetails> getAllPost(Pageable page) {
         List<Post> posts = postRepository.findAll(page).getContent();
         ArrayList<PostDetails> results = new ArrayList<>();
         for (Post post : posts) {
@@ -58,7 +59,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max) {
+    public Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max) {
         List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
         List<PostDetails> results = new ArrayList<>();
         for (Post post : posts) {
@@ -68,7 +69,7 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFoundException {
+    public Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) {
         List<Post> posts = postRepository.findPostsByCoordinates(distance,latitude,longitude, floorArea, min, max);
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
@@ -98,7 +99,7 @@ public class PostService implements IPostService {
 
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, double min, double max) throws IdNotFoundException {
+    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFound {
         Account account = accountService.getCurrentAccount();
         if (account == null)
             throw new IdNotFoundException();
@@ -118,7 +119,7 @@ public class PostService implements IPostService {
         Account account = accountService.getCurrentAccount();
         Post updatePost = postRepository.findPostById(post.getId());
         if (account.getId().equals(updatePost.getCreatedById())) {
-            updatePost.setContents(post.getContent());
+            updatePost.setContents(post.getContents());
             updatePost.setLatitude(post.getLatitude());
             updatePost.setLongitude(post.getLongitude());
             updatePost.setPrice(post.getPrice());
@@ -132,7 +133,7 @@ public class PostService implements IPostService {
                     albumService.createAlbum(post.getAlbum());
             }
             return modelMapper.map(updatePost, PostDetails.class);
-        } else throw new UserPostsNotFoundException();
+        } else throw new UserPostsNotFound();
 
     }
 
@@ -148,7 +149,7 @@ public class PostService implements IPostService {
             throw new LongitudeException();
         if (post.getFloorArea() <= 0)
             throw new FloorAreaIncorrectValue();
-        if (post.getPrice() <= 0)
+        if (post.getPrice().compareTo(new BigInteger("0")) <= 0)
             throw new PriceIncorrectValue();
 
     }
@@ -156,7 +157,7 @@ public class PostService implements IPostService {
     public void checkFormatPost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue {
         if (post.getFloorArea() <= 0)
             throw new FloorAreaIncorrectValue();
-        if (post.getPrice() <= 0)
+        if (post.getPrice().compareTo(new BigInteger("0")) <= 0)
             throw new PriceIncorrectValue();
 
     }

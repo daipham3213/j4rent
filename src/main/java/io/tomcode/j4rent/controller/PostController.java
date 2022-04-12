@@ -19,6 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigInteger;
+
 @SecurityRequirement(name = "javainuseapi")
 @RestController
 @RequestMapping("/post")
@@ -46,10 +48,10 @@ public class PostController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
-            @RequestParam(name = "minPrice", required = false, defaultValue = "0") double minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") double maxPrice) {
+            @RequestParam(name = "minPrice", required = false, defaultValue = "0") BigInteger minPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") BigInteger maxPrice) {
         try {
-            Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
+            Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
             Page<PostDetails> allPost = postService.getCreatedPosts(pageable, floorArea, minPrice, maxPrice);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", allPost), HttpStatus.OK);
         } catch (Exception e) {
@@ -79,16 +81,16 @@ public class PostController {
     public ResponseEntity<ResponseResult> getAllPostsWithClosestLocation(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
-            @RequestParam(name = "minPrice", required = false, defaultValue = "0") double minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") double maxPrice,
+            @RequestParam(name = "floorArea", required = false, defaultValue = "500") float floorArea,
+            @RequestParam(name = "minPrice", required = false, defaultValue = "0") BigInteger minPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") BigInteger maxPrice,
             @RequestParam(name = "distance", required = false, defaultValue = "5") double distance,
             @RequestParam(name = "latitude", required = false, defaultValue = "0") double latitude,
             @RequestParam(name = "longitude", required = false, defaultValue = "0") double longitude
     ) {
         try {
 
-            Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
+            Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
             Page<PostDetails> allPost = postService.getAllPost(pageable, floorArea, minPrice, maxPrice, latitude, longitude, distance);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", allPost), HttpStatus.OK);
         } catch (Exception e) {

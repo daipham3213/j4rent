@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class PostView {
-    private String content;
+    private String contents;
 
     private double latitude;
 

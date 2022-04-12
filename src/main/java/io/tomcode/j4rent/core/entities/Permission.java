@@ -18,4 +18,10 @@ public class Permission extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+//    @ManyToMany
+//    @JoinTable(name = "role_permissions",
+//            joinColumns = @JoinColumn(name = "permission_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private List<Role> roles = new ArrayList<>();
+
 }

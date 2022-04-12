@@ -3,6 +3,7 @@ package io.tomcode.j4rent.core.entities;
 import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import lombok.*;
+import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,7 +16,6 @@ import java.util.*;
 @Setter
 public class Post extends BaseEntity {
 
-    @NonNull
     @Column(name = "contents")
     private String contents;
 
@@ -35,6 +35,10 @@ public class Post extends BaseEntity {
     private float floorArea;
 
     @NonNull
+    @Column(name = "address")
+    private String address;
+
+    @NonNull
     @Column(name = "furniture_status")
     private String furnitureStatus;
 
@@ -46,9 +50,8 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @ManyToOne
-    @JoinColumn(name = "document_id")
-    private Document document;
+    @Column(name = "document_id")
+    private UUID documentId;
 
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
@@ -56,20 +59,22 @@ public class Post extends BaseEntity {
 
     public Post(PostDetails postDetails) {
         setId(postDetails.getId());
-        this.contents = postDetails.getContent();
+        this.contents = postDetails.getContents();
         this.latitude = postDetails.getLatitude();
         this.longitude = postDetails.getLongitude();
         this.price = postDetails.getPrice();
         this.floorArea = postDetails.getFloorArea();
+        this.address = postDetails.getAddress();
         this.furnitureStatus = postDetails.getFurnitureStatus();
     }
 
     public Post(PostCreate postCreate) {
-        this.contents = postCreate.getContent();
+        this.contents = postCreate.getContents();
         this.latitude = postCreate.getLatitude();
         this.longitude = postCreate.getLongitude();
         this.price = postCreate.getPrice();
         this.floorArea = postCreate.getFloorArea();
+        this.address = postCreate.getAddress();
         this.furnitureStatus = postCreate.getFurnitureStatus();
     }
 }

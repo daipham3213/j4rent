@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 @Data
@@ -11,13 +12,13 @@ import java.util.Date;
 @NoArgsConstructor
 public class PostCreate {
 
-    private String content;
+    private String contents;
 
     private double latitude;
 
     private double longitude;
 
-    private double price;
+    private BigInteger price;
 
     private float floorArea;
 
@@ -25,7 +26,7 @@ public class PostCreate {
 
     private String furnitureStatus;
 
-    private Date createdDate;
+    private Date createdAt;
 
     private AlbumCreate album;
 }

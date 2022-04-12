@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.UUID;
 
@@ -20,5 +21,6 @@ public class OTP extends BaseEntity {
 
     private int otp;
 
+    @Column(name = "document_id")
     private UUID documentId;
 }

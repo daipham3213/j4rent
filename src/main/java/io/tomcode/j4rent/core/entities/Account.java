@@ -26,8 +26,14 @@ public class Account extends BaseEntity implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "fist_name")
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "recently_viewed_posts")
+    private String recentlyViewedPosts;
+
+    @Column(name = "saved_posts")
+    private String savedPosts;
 
     @Column(name = "last_name")
     private String lastName;

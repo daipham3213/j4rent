@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 @Component
@@ -19,15 +20,15 @@ public interface IPostService {
 
     Post getPostById(UUID id);
 
-    Page<PostDetails> getAllPost(Pageable page) throws IdNotFoundException;
+    Page<PostDetails> getAllPost(Pageable page) throws IdNotFound;
 
-    Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max) throws IdNotFoundException;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFound;
 
-    Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFoundException;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) throws IdNotFound;
 
-    Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFoundException;
+    Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFound;
 
-    Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, double min, double max) throws IdNotFoundException;
+    Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFound;
 
-    PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, IdNotFoundException, UserPostsNotFoundException;
+    PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, IdNotFound, UserPostsNotFound;
 }

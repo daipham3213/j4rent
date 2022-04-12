@@ -19,4 +19,7 @@ public class Member extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "thead_id")
     private Conversation conversation;
+
+    @Column(name = "is_blocked")
+    private boolean isBlocked;
 }
