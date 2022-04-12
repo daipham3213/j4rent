@@ -14,7 +14,9 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
 
     List<Document> findByCreatedByIdIsAndDocumentCodeEquals(UUID createdById, String documentCode);
 
+    void deleteAllByCreatedByIdAndDocumentCode( UUID id,String documentCode );
 
+    void deleteAllByDocumentCode(String code);
 
 
 

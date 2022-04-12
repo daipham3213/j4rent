@@ -62,7 +62,7 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     public OTP register(Register account) {
-        Document document = documentService.createDocument("account", account);
+        Document document = documentService.createDocument("ACCOUNT", account);
         OTP otp = otpService.createOTP(document.getId());
         emailService.sendEmail(account.getEmail(), "This is the otp for authentication", " OTP : " + otp.getOtp());
         return otp;
@@ -86,7 +86,9 @@ public class AccountService implements IAccountService, UserDetailsService {
         info.setPhoneNumber(register.getPhoneNumber());
         info.setEmail(register.getEmail());
         checkAccountExists(register);
-        populateAccount(info);
+        Account newAccount = populateAccount(info);
+        documentService.updateCreatedByDocument(document.getId(),newAccount.getId());
+        documentService.deleteOTPAndDocument(newAccount.getId());
         return modelMapper.map(info, UserInfo.class);
     }
 
@@ -164,7 +166,6 @@ public class AccountService implements IAccountService, UserDetailsService {
     public UserInfo updateUser(UserInfo info) throws IdNotFound {
         Account account = getCurrentAccount();
         if (account!= null){
-            account.setUsername(info.getUsername());
             account.setFirstName(info.getFirstName());
             account.setLastName(info.getLastName());
             account.setDob(info.getDob());

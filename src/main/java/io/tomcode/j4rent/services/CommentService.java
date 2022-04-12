@@ -5,7 +5,6 @@ import io.tomcode.j4rent.core.entities.Album;
 import io.tomcode.j4rent.core.entities.Comment;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.CommentRepository;
-import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IAlbumService;
 import io.tomcode.j4rent.core.services.ICommentService;
 import io.tomcode.j4rent.core.services.IPostService;
@@ -25,14 +24,12 @@ import java.util.UUID;
 public class CommentService implements ICommentService {
     private final CommentRepository commentRepository;
     private final IAlbumService albumService;
-    private final IAccountService accountService;
     private final ModelMapper modelMapper;
     private final IPostService postService;
 
-    public CommentService(CommentRepository commentRepository, IAlbumService albumService, IAccountService accountService, ModelMapper modelMapper, IPostService postService) {
+    public CommentService(CommentRepository commentRepository, IAlbumService albumService, ModelMapper modelMapper, IPostService postService) {
         this.commentRepository = commentRepository;
         this.albumService = albumService;
-        this.accountService = accountService;
         this.modelMapper = modelMapper;
         this.postService = postService;
     }
@@ -85,7 +82,6 @@ public class CommentService implements ICommentService {
 
     @Override
     public CommentCreate updateComment(CommentCreate comment) throws IdNotFound {
-//        Account account = accountService.getCurrentAccount();
         Comment commentUpdate = commentRepository.findCommentById(comment.getId());
 //        if (account.getId().equals(commentUpdate.getCreatedById())){
 

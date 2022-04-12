@@ -31,4 +31,11 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     @Query(value = "SELECT distinct id from Comment  where parentN.id=:id")
     List<UUID> findComment(@Param("id") UUID uuid);
 
+
+//    String HAVERSINE_PART = "";
+//
+//    @Query(value = "select distinct p from Post p where p.price between :min and :max and p.floorArea between 0 and :floorArea ")
+//    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea,@Param("min") double min,@Param("max") double max);
 }
+// @Query(value = "select distinct  p  from  Post p where  and  p.price  between 150 and  300000000000")
+//

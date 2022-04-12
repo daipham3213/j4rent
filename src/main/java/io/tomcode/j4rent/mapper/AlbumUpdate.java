@@ -1,4 +1,4 @@
-package io.tomcode.j4rent.services;
+package io.tomcode.j4rent.mapper;
 
 import io.tomcode.j4rent.core.entities.Album;
 import io.tomcode.j4rent.mapper.AlbumCreate;

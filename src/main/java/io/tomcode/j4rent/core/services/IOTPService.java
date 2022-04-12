@@ -13,8 +13,10 @@ public interface IOTPService {
 
     int generateOTP();
 
-    void cleanOTP(int otp);
+    void cleanOTP(UUID documentCode);
 
     OTP getOTP(int OTP) throws InvalidOTPException;
+
+
 
 }

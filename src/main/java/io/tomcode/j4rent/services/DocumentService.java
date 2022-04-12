@@ -3,12 +3,11 @@ package io.tomcode.j4rent.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Document;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.DocumentRepository;
-import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IDocumentService;
+import io.tomcode.j4rent.core.services.IOTPService;
 import io.tomcode.j4rent.mapper.DocumentCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import org.modelmapper.ModelMapper;
@@ -26,11 +25,13 @@ public class DocumentService implements IDocumentService {
     private final DocumentRepository documentRepository;
     private final ModelMapper modelMapper;
     private final ObjectMapper mapper;
+    private final IOTPService otpService;
 
-    public DocumentService(DocumentRepository documentRepository, ModelMapper modelMapper, ObjectMapper mapper) {
+    public DocumentService(DocumentRepository documentRepository, ModelMapper modelMapper, ObjectMapper mapper, IOTPService otpService) {
         this.documentRepository = documentRepository;
         this.modelMapper = modelMapper;
         this.mapper = mapper;
+        this.otpService = otpService;
     }
 
 
@@ -90,5 +91,22 @@ public class DocumentService implements IDocumentService {
 
 
     }
+
+    @Override
+    public void deleteOTPAndDocument(UUID uuid) {
+        List<Document> list = documentRepository.findByCreatedByIdIsAndDocumentCodeEquals(uuid,"ACCOUNT");
+        for ( Document document: list) {
+            otpService.cleanOTP(document.getId());
+        }
+        documentRepository.deleteAllByCreatedByIdAndDocumentCode(uuid,"ACCOUNT");
+    }
+
+    @Override
+    public void updateCreatedByDocument(UUID idDocument, UUID userId) {
+         Document document = documentRepository.findDocumentById(idDocument);
+         document.setCreatedById(userId);
+         documentRepository.save(document);
+    }
+
 
 }

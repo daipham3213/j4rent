@@ -21,13 +21,13 @@ public interface IPostService {
 
     Page<PostDetails> getAllPost(Pageable page) throws IdNotFound;
 
-    Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max) throws IdNotFound;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max) throws IdNotFound;
 
-    Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max, double la, double lo, double distance) throws IdNotFound;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFound;
 
     Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFound;
 
-    Page<PostDetails> getCreatedPosts(Pageable page, int floorArea, int min, int max) throws IdNotFound;
+    Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, double min, double max) throws IdNotFound;
 
     PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, IdNotFound, UserPostsNotFound;
 }

@@ -37,12 +37,13 @@ public class OTPService implements IOTPService {
     }
 
     @Override
-    public void cleanOTP(int otp) {
-        otpRepository.delete(otpRepository.findOTPByOtp(otp));
+    public void cleanOTP(UUID uuid) {
+        otpRepository.deleteOTPByDocumentId(uuid);
     }
 
     @Override
-    public OTP getOTP(int otp) throws InvalidOTPException {
+    public OTP
+    getOTP(int otp) throws InvalidOTPException {
         OTP value = otpRepository.findOTPByOtp(otp);
         if (value == null) {
             throw new InvalidOTPException();

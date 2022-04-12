@@ -13,4 +13,8 @@ public interface OTPRepository extends JpaRepository<OTP, UUID> {
 
     List<OTP> findOTPSByOtp(int otp);
 
+    void deleteAllByDocumentId(UUID uuid);
+
+    void  deleteOTPByDocumentId(UUID uuid);
+
 }

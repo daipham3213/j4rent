@@ -2,20 +2,15 @@ package io.tomcode.j4rent.services;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Album;
-import io.tomcode.j4rent.core.entities.Comment;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.PostRepository;
 import io.tomcode.j4rent.core.services.*;
 import io.tomcode.j4rent.exception.*;
-import io.tomcode.j4rent.mapper.PostCreate;
-import io.tomcode.j4rent.mapper.PostDetails;
-import io.tomcode.j4rent.mapper.PostUpdate;
-import io.tomcode.j4rent.mapper.PostView;
+import io.tomcode.j4rent.mapper.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.security.oauth2.jwt.SupplierJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
@@ -48,9 +43,8 @@ public class PostService implements IPostService {
         Album album = albumService.createAlbum(postCreate.getAlbum());
         Post post = new Post(postCreate);
         post.setAlbum(album);
-        documentService.createDocument("post", postRepository.save(post));
+        documentService.createDocument("POST",post);
         return modelMapper.map(post, PostView.class);
-
     }
 
     @Override
@@ -64,33 +58,30 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max) throws IdNotFound {
+    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max) throws IdNotFound {
         List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
         List<PostDetails> results = new ArrayList<>();
-        for (Post post : posts
-        ) {
+        for (Post post : posts) {
             results.add(convert(post));
-
         }
         return new PageImpl<>(results, page, page.getPageSize());
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max, double la, double lo, double distance) throws IdNotFound {
+    public Page<PostDetails> getAllPost(Pageable page, float floorArea, double min, double max, double latitude, double longitude, double distance) throws IdNotFound {
+//        List<Post> posts = postRepository.findPostsByCoordinates(distance,latitude,longitude, floorArea, min, max);
         List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
+        Account account = accountService.getCurrentAccount();
         List<PostDetails> results = new ArrayList<>();
-        for (Post post : posts
-        ) {
-            if (distance(la, lo, post.getLatitude(), post.getLongitude()) <= distance && la != 0 && lo != 0) {
-                results.add(convert(post));
+        if (posts.size() > 0) {
+            for (Post post: posts) {
+                results.add(modelMapper.map(post, PostDetails.class));
             }
+        } else {
+            return getAllPost(page, floorArea, min, max);
         }
-        Page<PostDetails> post = new PageImpl<>(results, page, page.getPageSize());
-        if (results != null)
-            post = getAllPost(page, floorArea, min, max);
-        return post;
+        return new PageImpl<>(results, page, page.getPageSize());
     }
-
 
     @Override
     public Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFound {
@@ -109,7 +100,7 @@ public class PostService implements IPostService {
 
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page, int floorArea, int min, int max) throws IdNotFound {
+    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, double min, double max) throws IdNotFound {
         Account account = accountService.getCurrentAccount();
         if (account == null)
             throw new IdNotFound();
@@ -194,15 +185,6 @@ public class PostService implements IPostService {
             }
         }
         return result;
-    }
-
-    public double distance(double lat1, double lon1, double lat2, double lon2) {
-        lat1 = Math.toRadians(lat1);
-        lon1 = Math.toRadians(lon1);
-        lat2 = Math.toRadians(lat2);
-        lon2 = Math.toRadians(lon2);
-        double earthRadius = 6371.01; //Kilometers
-        return earthRadius * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
     }
 
 }

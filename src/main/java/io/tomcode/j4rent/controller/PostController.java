@@ -38,8 +38,8 @@ public class PostController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
-            @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") int maxPrice) {
+            @RequestParam(name = "minPrice", required = false, defaultValue = "0") double minPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") double maxPrice) {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdDate"));
             Page<PostDetails> allPost = postService.getCreatedPosts(pageable, floorArea, minPrice, maxPrice);
@@ -72,8 +72,8 @@ public class PostController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "floorArea", required = false, defaultValue = "500") int floorArea,
-            @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") int maxPrice,
+            @RequestParam(name = "minPrice", required = false, defaultValue = "0") double minPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") double maxPrice,
             @RequestParam(name = "distance", required = false, defaultValue = "5") double distance,
             @RequestParam(name = "latitude", required = false, defaultValue = "0") double latitude,
             @RequestParam(name = "longitude", required = false, defaultValue = "0") double longitude

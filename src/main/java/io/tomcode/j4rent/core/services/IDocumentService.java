@@ -28,5 +28,9 @@ public interface IDocumentService {
 
     Page<PostDetails> getPostCreatedInDocument(Pageable pageable,UUID uuid);
 
+    void deleteOTPAndDocument(UUID uuid);
+
+    void updateCreatedByDocument(UUID idDocument, UUID userId);
+
 
 }
