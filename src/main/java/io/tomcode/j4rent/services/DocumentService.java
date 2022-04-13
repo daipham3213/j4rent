@@ -15,11 +15,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+@Transactional
 @Service("documentService")
 public class DocumentService implements IDocumentService {
     private final DocumentRepository documentRepository;
@@ -97,6 +98,11 @@ public class DocumentService implements IDocumentService {
         Document document = documentRepository.findDocumentById(uuid);
         otpService.cleanOTP(document.getId());
         documentRepository.deleteById(document.getId());
+    }
+
+    @Override
+    public void deleteDocumentById(UUID uuid) {
+        documentRepository.deleteById(uuid);
     }
 
     @Override

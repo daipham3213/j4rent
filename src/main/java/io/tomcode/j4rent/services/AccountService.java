@@ -2,10 +2,7 @@ package io.tomcode.j4rent.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tomcode.j4rent.configuration.SecurityConfig;
-import io.tomcode.j4rent.core.entities.Account;
-import io.tomcode.j4rent.core.entities.Document;
-import io.tomcode.j4rent.core.entities.OTP;
-import io.tomcode.j4rent.core.entities.Role;
+import io.tomcode.j4rent.core.entities.*;
 import io.tomcode.j4rent.core.repositories.AccountRepository;
 import io.tomcode.j4rent.core.services.*;
 import io.tomcode.j4rent.exception.*;
@@ -22,13 +19,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
+@Transactional
 @Service("accountService")
 public class AccountService implements IAccountService, UserDetailsService {
     private final AccountRepository accountRepository;
@@ -42,8 +39,9 @@ public class AccountService implements IAccountService, UserDetailsService {
     private final IEmailService emailService;
     private final IJwtService jwtService;
     private final IRoleService roleService;
+    private final IImageService imageService;
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, ModelMapper modelMapper, ObjectMapper objectMapper, IRoleService roleService) {
+    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, ModelMapper modelMapper, ObjectMapper objectMapper, IRoleService roleService, IImageService imageService) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.documentService = documentService;
@@ -53,6 +51,7 @@ public class AccountService implements IAccountService, UserDetailsService {
         this.modelMapper = modelMapper;
         this.objectMapper = objectMapper;
         this.roleService = roleService;
+        this.imageService = imageService;
     }
 
     @Override
@@ -182,6 +181,16 @@ public class AccountService implements IAccountService, UserDetailsService {
         }
         else throw new IdNotFoundException();
     }
+
+    public Image updateAvatar(MultipartFile file) throws IdNotFoundException, ImageFailException {
+        Account account = getCurrentAccount();
+        ImageCreate imageCreate = new ImageCreate( "Avatar by: " + account.getId(),file);
+        if (account!= null) {
+            return imageService.upload(imageCreate);
+        }
+        else throw new IdNotFoundException();
+    }
+
 
     private Account populateAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));

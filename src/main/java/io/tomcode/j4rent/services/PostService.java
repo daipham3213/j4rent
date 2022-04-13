@@ -14,12 +14,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+@Transactional
 @Service("postService")
 public class PostService implements IPostService {
     private final PostRepository postRepository;
@@ -99,12 +100,12 @@ public class PostService implements IPostService {
 
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFound {
+    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFoundException {
         Account account = accountService.getCurrentAccount();
         if (account == null)
             throw new IdNotFoundException();
         else {
-            List<Post> posts = postRepository.findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(account.getId(), floorArea, Double.valueOf(min), Double.valueOf(max), page);
+            List<Post> posts = postRepository.findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(account.getId(), floorArea, min, max, page);
             ArrayList<PostDetails> results = new ArrayList<>();
             for (Post post : posts) {
                 results.add(convert(post));
@@ -133,7 +134,7 @@ public class PostService implements IPostService {
                     albumService.createAlbum(post.getAlbum());
             }
             return modelMapper.map(updatePost, PostDetails.class);
-        } else throw new UserPostsNotFound();
+        } else throw new UserPostsNotFoundException();
 
     }
 

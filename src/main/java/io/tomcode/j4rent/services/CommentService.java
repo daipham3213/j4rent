@@ -14,11 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Transactional
 @Service("commentService")
 public class CommentService implements ICommentService {
     private final CommentRepository commentRepository;
@@ -83,9 +85,8 @@ public class CommentService implements ICommentService {
     public CommentCreate updateComment(CommentCreate comment) throws IdNotFoundException {
         Comment commentUpdate = commentRepository.findCommentById(comment.getId());
 //        if (account.getId().equals(commentUpdate.getCreatedById())){
-
-        if (comment != null) {
-            comment.setContents(comment.getContents());
+        if (commentUpdate!= null){
+            commentUpdate.setContents(comment.getContents());
             commentRepository.save(commentUpdate);
             return modelMapper.map(comment, CommentCreate.class);
         } else throw new IdNotFoundException();

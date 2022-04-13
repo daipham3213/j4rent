@@ -34,6 +34,8 @@ public class PostDetails {
 
     private Date createdAt;
 
+    private int views;
+
     private AlbumView album;
 
     private int sumComment;

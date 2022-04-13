@@ -1,11 +1,13 @@
 package io.tomcode.j4rent.core.services;
 
 import io.tomcode.j4rent.core.entities.Account;
+import io.tomcode.j4rent.core.entities.Image;
 import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.exception.*;
 import io.tomcode.j4rent.mapper.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -38,4 +40,6 @@ public interface IAccountService {
     UserInfo getCurrentUserInfo();
 
     UserInfo updateUser(UserInfo info) throws IdNotFoundException;
+
+    Image updateAvatar(MultipartFile file) throws IdNotFoundException, ImageFailException;
 }

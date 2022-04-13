@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @EnableGlobalMethodSecurity(
         prePostEnabled = true
@@ -38,8 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(config -> {
                     config
                             .antMatchers(
+                                    "/swagger-ui/**",
                                     "/account/*",
-                                    "/account/",
+                                    "/document/*",
                                     "/roles",
                                     "/post"
                             )

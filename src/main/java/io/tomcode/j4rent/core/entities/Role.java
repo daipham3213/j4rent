@@ -30,6 +30,9 @@ public class Role extends BaseEntity implements GrantedAuthority {
     public Role(String role) {
         this.name = role;
     }
+//
+//    @OneToMany(mappedBy = "role", orphanRemoval = true,fetch = FetchType.LAZY)
+//    private List<RolePermissions> rolePermissions = new ArrayList<>();
 
     @Override
     public String getAuthority() {

@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.*;
 
 @AllArgsConstructor
@@ -26,17 +27,13 @@ public class Post extends BaseEntity {
     @NonNull
     @Column(name = "longitude")
     private double longitude;
-    @NonNull
     @Column(name = "price")
-    private double price;
+    private BigInteger price;
 
     @NonNull
     @Column(name = "floor_area")
     private float floorArea;
 
-    @NonNull
-    @Column(name = "address")
-    private String address;
 
     @NonNull
     @Column(name = "furniture_status")
@@ -50,8 +47,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @Column(name = "document_id")
-    private UUID documentId;
+    @ManyToOne
+    @JoinColumn(name = "document_id")
+    private Document document;
 
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
@@ -64,7 +62,6 @@ public class Post extends BaseEntity {
         this.longitude = postDetails.getLongitude();
         this.price = postDetails.getPrice();
         this.floorArea = postDetails.getFloorArea();
-        this.address = postDetails.getAddress();
         this.furnitureStatus = postDetails.getFurnitureStatus();
     }
 
@@ -74,7 +71,6 @@ public class Post extends BaseEntity {
         this.longitude = postCreate.getLongitude();
         this.price = postCreate.getPrice();
         this.floorArea = postCreate.getFloorArea();
-        this.address = postCreate.getAddress();
         this.furnitureStatus = postCreate.getFurnitureStatus();
     }
 }

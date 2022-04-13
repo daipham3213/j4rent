@@ -9,9 +9,10 @@ import io.tomcode.j4rent.mapper.AlbumCreate;
 import io.tomcode.j4rent.mapper.AlbumUpdate;
 import io.tomcode.j4rent.mapper.ImageCreate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-
+@Transactional
 @Service("albumService")
 public class AlbumService implements IAlbumService {
 

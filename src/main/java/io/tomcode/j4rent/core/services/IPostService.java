@@ -20,15 +20,15 @@ public interface IPostService {
 
     Post getPostById(UUID id);
 
-    Page<PostDetails> getAllPost(Pageable page) throws IdNotFound;
+    Page<PostDetails> getAllPost(Pageable page) ;
 
-    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFound;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max) ;
 
-    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) throws IdNotFound;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) ;
 
-    Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFound;
+    Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFoundException;
 
-    Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFound;
+    Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws  IdNotFoundException;
 
-    PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, IdNotFound, UserPostsNotFound;
+    PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException,  UserPostsNotFoundException;
 }

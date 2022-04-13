@@ -20,8 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
-
-@SecurityRequirement(name = "javainuseapi")
 @RestController
 @RequestMapping("/post")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
@@ -40,8 +38,6 @@ public class PostController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
-
 
     @GetMapping("/created")
     public ResponseEntity<ResponseResult> getCreatedPosts(

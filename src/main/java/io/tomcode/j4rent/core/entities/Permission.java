@@ -18,6 +18,10 @@ public class Permission extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+//    @OneToMany(mappedBy = "Permission", orphanRemoval = true,fetch = FetchType.LAZY)
+//    private List<RolePermissions> rolePermissions = new ArrayList<>();
+
+
 //    @ManyToMany
 //    @JoinTable(name = "role_permissions",
 //            joinColumns = @JoinColumn(name = "permission_id"),

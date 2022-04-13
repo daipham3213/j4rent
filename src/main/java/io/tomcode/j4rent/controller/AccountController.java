@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 
@@ -74,10 +75,19 @@ public class AccountController {
         return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", response), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/update")
+    @PutMapping( "/updateUser")
     public ResponseEntity<ResponseResult> login(@RequestBody UserInfo info) {
         try {
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateUser(info)), HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @PatchMapping("/updateAvatar")
+    public ResponseEntity<ResponseResult> updateAvatar(@RequestBody MultipartFile file){
+        try {
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateAvatar(file)), HttpStatus.OK);
 
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

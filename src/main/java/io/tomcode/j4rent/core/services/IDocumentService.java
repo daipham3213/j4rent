@@ -30,6 +30,8 @@ public interface IDocumentService {
 
     void deleteOTPAndDocument(UUID uuid);
 
+    void deleteDocumentById(UUID uuid);
+
     void updateCreatedByDocument(UUID idDocument, UUID userId);
 
 

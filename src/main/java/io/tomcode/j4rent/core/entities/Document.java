@@ -38,11 +38,14 @@ public class Document extends BaseEntity {
     @Column(name = "is_register")
     private boolean isRegister;
 
-    @Column(name = "is_otp")
-    private boolean isOTP;
+//    @Column(name = "is_otp")
+//    private boolean isOTP;
 
     @OneToMany(mappedBy = "document", orphanRemoval = true)
     private List<Workflow> workflows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "document", orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
 
     public Document(DocumentCreate document) {
         this.documentCode = document.getDocumentCode();

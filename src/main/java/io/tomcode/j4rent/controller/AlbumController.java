@@ -1,16 +1,13 @@
 package io.tomcode.j4rent.controller;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.tomcode.j4rent.core.entities.Album;
 import io.tomcode.j4rent.core.services.IAlbumService;
 import io.tomcode.j4rent.mapper.AlbumCreate;
-import io.tomcode.j4rent.mapper.AlbumView;
 import io.tomcode.j4rent.mapper.ResponseResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-@SecurityRequirement(name = "javainuseapi")
 @RestController
 @RequestMapping("/album")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")

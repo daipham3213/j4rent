@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Embeddable
 @Entity(name = "RolePermissions")
-@Table(name = "pole_permissions")
+@Table(name = "role_permissions")
 @Getter
 @Setter
 public class RolePermissions extends  BaseEntity{
@@ -21,5 +21,5 @@ public class RolePermissions extends  BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "permissions_id")
-    private Conversation conversation;
+    private Permission Permission;
 }
