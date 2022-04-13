@@ -1,21 +1,15 @@
 package io.tomcode.j4rent.mapper;
 
-import io.tomcode.j4rent.core.entities.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class PostDetails {
-
-    private UUID id;
+public class PostCreate {
 
     private String content;
 
@@ -33,10 +27,5 @@ public class PostDetails {
 
     private Date createdDate;
 
-    private AlbumView album;
-
-    private int sumComment;
-
-//    private List<CommentCreate> comments;
-
+    private AlbumCreate album;
 }

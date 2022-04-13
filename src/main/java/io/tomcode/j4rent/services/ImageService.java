@@ -4,7 +4,8 @@ import io.tomcode.j4rent.core.entities.Image;
 import io.tomcode.j4rent.core.repositories.ImageRepository;
 import io.tomcode.j4rent.core.services.IImageService;
 import io.tomcode.j4rent.exception.ImageFailException;
-import io.tomcode.j4rent.mapper.ImageLoad;
+import io.tomcode.j4rent.mapper.ImageCreate;
+import io.tomcode.j4rent.mapper.ImageView;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -21,27 +22,17 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    public void upImage(ImageLoad imageLoad) throws ImageFailException {
+    public Image upload(ImageCreate file) throws ImageFailException {
         try {
-            Map uploadResult = cloudinaryService.upload(imageLoad.getFile());
-            Image image = new Image(imageLoad.getTitle(), (String) uploadResult.get("url"));
-            imageRepository.save(image);
+            Map<String, Object> uploadResult = cloudinaryService.upload(file.getFile());
+            Image image = new Image(file.getTitle(), (String) uploadResult.get("url"));
+            return imageRepository.save(image);
         } catch (Exception e) {
             throw new ImageFailException();
         }
 
     }
 
-    public Image createImage(ImageLoad imageLoad) throws ImageFailException {
-        try {
-            Map uploadResult = cloudinaryService.upload(imageLoad.getFile());
-            Image image = new Image(imageLoad.getTitle(), (String) uploadResult.get("url"));
-            imageRepository.save(image);
-            return image;
-        } catch (Exception e) {
-            throw new ImageFailException();
-        }
 
-    }
 
 }

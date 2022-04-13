@@ -19,5 +19,7 @@ public interface AccountRepository extends BaseRepository<Account, UUID> {
 
     Account findByUsernameEquals(@NonNull String username);
 
+    Account findByEmailEquals(String email);
 
+    Account findByPhoneNumberEquals(String phoneNumber);
 }

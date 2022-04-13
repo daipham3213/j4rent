@@ -3,10 +3,8 @@ package io.tomcode.j4rent.controller;
 
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.services.IAccountService;
-import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.mapper.*;
 
-import liquibase.pro.packaged.U;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/account")
+@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class AccountController {
 
     private final IAccountService accountService;
@@ -25,10 +24,10 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("")
-    @ResponseBody
-    public ResponseEntity<String> testResponse() {
-        return new ResponseEntity<>("Hello world", HttpStatus.OK);
+    @GetMapping("/")
+    public ResponseEntity<UserInfo> currentUser() {
+        UserInfo account = accountService.getCurrentUserInfo();
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
     @GetMapping("/all")
@@ -60,9 +59,9 @@ public class AccountController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Object> verifyOTP(@RequestBody int otp) {
+    public ResponseEntity<Object> verifyOTP(@RequestBody VerifyOTP otp) {
         try {
-            accountService.verify(otp);
+            accountService.verify(otp.getOtp());
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Valid OTP"), HttpStatus.OK);
 
         } catch (Exception e) {
@@ -71,8 +70,18 @@ public class AccountController {
     }
 
     @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<JwtResponse> login(@RequestBody Login login) {
+    public ResponseEntity<ResponseResult> login(@RequestBody Login login) {
         JwtResponse response = accountService.authenticate(login);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", response), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<ResponseResult> login(@RequestBody UserInfo info) {
+        try {
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateUser(info)), HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

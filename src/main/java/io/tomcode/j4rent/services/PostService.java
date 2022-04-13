@@ -1,108 +1,208 @@
 package io.tomcode.j4rent.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Album;
-import io.tomcode.j4rent.core.entities.Document;
+import io.tomcode.j4rent.core.entities.Comment;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.PostRepository;
-import io.tomcode.j4rent.core.services.IAlbumService;
-import io.tomcode.j4rent.core.services.IPostService;
-import io.tomcode.j4rent.exception.ImageFailException;
+import io.tomcode.j4rent.core.services.*;
+import io.tomcode.j4rent.exception.*;
+import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
+import io.tomcode.j4rent.mapper.PostUpdate;
+import io.tomcode.j4rent.mapper.PostView;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.oauth2.jwt.SupplierJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service("postService")
 public class PostService implements IPostService {
     private final PostRepository postRepository;
-    private final DocumentService documentService;
     private final ModelMapper modelMapper;
-    private final ObjectMapper objectMapper;
+
     private final IAlbumService albumService;
+    private final IDocumentService documentService;
+    private final IAccountService accountService;
 
-    public PostService(PostRepository postRepository, DocumentService documentService, ModelMapper modelMapper, ObjectMapper objectMapper, AlbumService albumService) {
+
+    public PostService(PostRepository postRepository, ModelMapper modelMapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService) {
         this.postRepository = postRepository;
-        this.documentService = documentService;
         this.modelMapper = modelMapper;
-        this.objectMapper = objectMapper;
         this.albumService = albumService;
+        this.documentService = documentService;
+        this.accountService = accountService;
     }
 
     @Override
-    public void createPost(PostDetails postDetails) throws ImageFailException {
-        Document document = documentService.createDocument("post", postDetails);
-        documentService.createDocument(document);
-        Album album = albumService.createAlbum(postDetails.getAlbum());
-        Post post = new Post(postDetails);
+    public PostView createPost(PostCreate postCreate) throws ImageFailException, LatitudeException, LongitudeException, FloorAreaIncorrectValue, PriceIncorrectValue {
+        checkFormatPost(postCreate);
+        Album album = albumService.createAlbum(postCreate.getAlbum());
+        Post post = new Post(postCreate);
         post.setAlbum(album);
-        postRepository.save(post);
+        documentService.createDocument("post", postRepository.save(post));
+        return modelMapper.map(post, PostView.class);
+
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page) {
-        return getPostDetails(page);
+    public Page<PostDetails> getAllPost(Pageable page) throws IdNotFound {
+        List<Post> posts = postRepository.findAll(page).getContent();
+        ArrayList<PostDetails> results = new ArrayList<>();
+        for (Post post : posts) {
+            results.add(convert(post));
+        }
+        return new PageImpl<>(results, page, page.getPageSize());
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, int mix, int max) {
-        return getPostDetails(page, mix, max);
+    public Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max) throws IdNotFound {
+        List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
+        List<PostDetails> results = new ArrayList<>();
+        for (Post post : posts
+        ) {
+            results.add(convert(post));
+
+        }
+        return new PageImpl<>(results, page, page.getPageSize());
     }
 
     @Override
-    public Page<PostDetails> getAllPost(Pageable page, int floorArea) {
-        return getPostDetails(page, floorArea);
-    }
-
-    private Page<PostDetails> getPostDetails(Pageable page, int floorArea) {
-        List<Post> posts = postRepository.findAll(page).getContent();
-        List<PostDetails> postDetail = new ArrayList<>();
+    public Page<PostDetails> getAllPost(Pageable page, int floorArea, int min, int max, double la, double lo, double distance) throws IdNotFound {
+        List<Post> posts = postRepository.findByFloorAreaLessThanEqualAndPriceBetween(floorArea, min, max, page);
+        List<PostDetails> results = new ArrayList<>();
         for (Post post : posts
         ) {
-            if (post.getFloorArea() <= floorArea)
-                postDetail.add(modelMapper.map(post, PostDetails.class));
+            if (distance(la, lo, post.getLatitude(), post.getLongitude()) <= distance && la != 0 && lo != 0) {
+                results.add(convert(post));
+            }
         }
-
-        return new PageImpl<PostDetails>(postDetail, page, page.getPageSize());
-    }
-
-    private Page<PostDetails> getPostDetails(Pageable page) {
-        List<Post> posts = postRepository.findAll(page).getContent();
-        List<PostDetails> postDetail = new ArrayList<>();
-        for (Post post : posts
-        ) {
-
-            postDetail.add(modelMapper.map(post, PostDetails.class));
-        }
-
-        return new PageImpl<PostDetails>(postDetail, page, page.getPageSize());
-    }
-
-    private Page<PostDetails> getPostDetails(Pageable page, int mix, int max) {
-        List<Post> posts = postRepository.findAll(page).getContent();
-        List<PostDetails> postDetail = new ArrayList<>();
-        for (Post post : posts
-        ) {
-            if (post.getPrice() < max && post.getPrice() >= mix)
-                postDetail.add(modelMapper.map(post, PostDetails.class));
-        }
-
-        return new PageImpl<PostDetails>(postDetail, page, page.getPageSize());
+        Page<PostDetails> post = new PageImpl<>(results, page, page.getPageSize());
+        if (results != null)
+            post = getAllPost(page, floorArea, min, max);
+        return post;
     }
 
 
-//    public void checkFormatPost(PostDetails postDetails) throws LatitudeException, LongitudeException {
-//        if (!NumberUtils.isParsable("" + postDetails.getLatitude()))
-//            throw new LatitudeException();
-//        if (!NumberUtils.isParsable("" + postDetails.getLongitude()))
-//            throw new LongitudeException();
-//    }
+    @Override
+    public Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFound {
+        Account account = accountService.getCurrentAccount();
+        if (account == null)
+            throw new IdNotFound();
+        else {
+            List<Post> posts = postRepository.findByCreatedByIdEquals(account.getId(), page);
+            ArrayList<PostDetails> results = new ArrayList<>();
+            for (Post post : posts) {
+                results.add(convert(post));
+            }
+            return new PageImpl<>(results, page, page.getPageSize());
+        }
+    }
 
+
+    @Override
+    public Page<PostDetails> getCreatedPosts(Pageable page, int floorArea, int min, int max) throws IdNotFound {
+        Account account = accountService.getCurrentAccount();
+        if (account == null)
+            throw new IdNotFound();
+        else {
+            List<Post> posts = postRepository.findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(account.getId(), floorArea, Double.valueOf(min), Double.valueOf(max), page);
+            ArrayList<PostDetails> results = new ArrayList<>();
+            for (Post post : posts) {
+                results.add(convert(post));
+            }
+            return new PageImpl<>(results, page, page.getPageSize());
+        }
+    }
+
+    @Override
+    public PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFound {
+        checkFormatPost(post);
+        Account account = accountService.getCurrentAccount();
+        Post updatePost = postRepository.findPostById(post.getId());
+        if (account.getId().equals(updatePost.getCreatedById())) {
+            updatePost.setContent(post.getContent());
+            updatePost.setLatitude(post.getLatitude());
+            updatePost.setLongitude(post.getLongitude());
+            updatePost.setPrice(post.getPrice());
+            updatePost.setFloorArea(post.getFloorArea());
+            updatePost.setFurnitureStatus(post.getFurnitureStatus());
+            if (post.getAlbum() != null) {
+                Album updateAlbum = albumService.getAlbumById(updatePost.getAlbum().getId());
+                if (updateAlbum != null) {
+                    albumService.updateAlbum(new AlbumUpdate(updateAlbum, post.getAlbum()));
+                } else
+                    albumService.createAlbum(post.getAlbum());
+            }
+            return modelMapper.map(updatePost, PostDetails.class);
+        } else throw new UserPostsNotFound();
+
+    }
+
+    @Override
+    public Post getPostById(UUID id) {
+        return postRepository.findPostById(id);
+    }
+
+    public void checkFormatPost(PostCreate post) throws LatitudeException, LongitudeException, FloorAreaIncorrectValue, PriceIncorrectValue {
+        if (!NumberUtils.isParsable(String.valueOf(post.getLatitude())))
+            throw new LatitudeException();
+        if (!NumberUtils.isParsable(String.valueOf(post.getLongitude())))
+            throw new LongitudeException();
+        if (post.getFloorArea() <= 0)
+            throw new FloorAreaIncorrectValue();
+        if (post.getPrice() <= 0)
+            throw new PriceIncorrectValue();
+
+    }
+
+    public void checkFormatPost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue {
+        if (post.getFloorArea() <= 0)
+            throw new FloorAreaIncorrectValue();
+        if (post.getPrice() <= 0)
+            throw new PriceIncorrectValue();
+
+    }
+
+    public PostDetails convert(Post post) {
+        int count = Math.toIntExact(postRepository.countCommentInPost(post));
+        List<UUID> list = postRepository.findCommentInPost(post);
+        for (UUID uuid : list) {
+            count += sumComment(uuid);
+        }
+        PostDetails details = modelMapper.map(post, PostDetails.class);
+        details.setSumComment(count);
+        return details;
+    }
+
+    public int sumComment(UUID uuid) {
+        int result = 0;
+        List<UUID> list = postRepository.findComment(uuid);
+        for (UUID child : list) {
+            result++;
+            List<UUID> childList = postRepository.findComment(child);
+            if (childList.size() > 0) {
+                result += sumComment(child);
+            }
+        }
+        return result;
+    }
+
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+        lat1 = Math.toRadians(lat1);
+        lon1 = Math.toRadians(lon1);
+        lat2 = Math.toRadians(lat2);
+        lon2 = Math.toRadians(lon2);
+        double earthRadius = 6371.01; //Kilometers
+        return earthRadius * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+    }
 
 }

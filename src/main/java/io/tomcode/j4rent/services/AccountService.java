@@ -8,13 +8,11 @@ import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.core.entities.Role;
 import io.tomcode.j4rent.core.repositories.AccountRepository;
 import io.tomcode.j4rent.core.services.*;
-import io.tomcode.j4rent.exception.EmailExistsException;
-import io.tomcode.j4rent.exception.InvalidOTPException;
-import io.tomcode.j4rent.exception.PhoneNumberExistsException;
-import io.tomcode.j4rent.exception.UsernameExistsException;
+import io.tomcode.j4rent.exception.*;
 import io.tomcode.j4rent.mapper.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,13 +32,15 @@ import java.util.stream.Collectors;
 @Service("accountService")
 public class AccountService implements IAccountService, UserDetailsService {
     private final AccountRepository accountRepository;
+
+    private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
+
     private final IDocumentService documentService;
     private final IOTPService otpService;
     private final IEmailService emailService;
     private final IJwtService jwtService;
-    private final ModelMapper modelMapper;
-    private final ObjectMapper objectMapper;
     private final IRoleService roleService;
 
     public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, ModelMapper modelMapper, ObjectMapper objectMapper, IRoleService roleService) {
@@ -87,10 +87,7 @@ public class AccountService implements IAccountService, UserDetailsService {
         info.setEmail(register.getEmail());
         checkAccountExists(register);
         populateAccount(info);
-        return  new UserInfo(info.getUsername(), info.getFirstName(),info.getLastName(),info.getDob(),info.getIdCard(),info.getGender(),info.getPhoneNumber(),info.getEmail());
-
-
-
+        return modelMapper.map(info, UserInfo.class);
     }
 
     @Override
@@ -98,9 +95,9 @@ public class AccountService implements IAccountService, UserDetailsService {
         if (accountRepository.findAccountByUsername(register.getUsername()) != null) {
             throw new UsernameExistsException();
         } else {
-            if (accountRepository.findAccountByEmail(register.getEmail()) != null) {
+            if (accountRepository.findByEmailEquals(register.getEmail()) != null) {
                 throw new PhoneNumberExistsException();
-            } else if (accountRepository.findAccountByPhoneNumber(register.getPhoneNumber()) != null)
+            } else if (accountRepository.findByPhoneNumberEquals(register.getPhoneNumber()) != null)
                 throw new EmailExistsException();
         }
         return false;
@@ -146,11 +143,43 @@ public class AccountService implements IAccountService, UserDetailsService {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
     }
 
+    @Override
+    public Account getCurrentAccount() {
+        Authentication authentication = getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+            return getAccountByUsername(currentUserName);
+        }
+        return null;
+    }
+
+    @Override
+    public UserInfo getCurrentUserInfo() {
+        Account account = getCurrentAccount();
+        if (account == null) return null;
+        return modelMapper.map(account, UserInfo.class);
+    }
+
+    @Override
+    public UserInfo updateUser(UserInfo info) throws IdNotFound {
+        Account account = getCurrentAccount();
+        if (account!= null){
+            account.setUsername(info.getUsername());
+            account.setFirstName(info.getFirstName());
+            account.setLastName(info.getLastName());
+            account.setDob(info.getDob());
+            account.setIdCard(info.getIdCard());
+            account.setGender(info.getGender());
+            return modelMapper.map(account, UserInfo.class);
+        }
+        else throw new IdNotFound();
+    }
+
     private Account populateAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setVerify(true);
         account.setAdmin(false);
-        if(roleService.getRoleByName("USER")==null)
+        if (roleService.getRoleByName("USER") == null)
             roleService.createRole("USER");
         account.setRole(roleService.getRoleByName("USER"));
         return accountRepository.save(account);

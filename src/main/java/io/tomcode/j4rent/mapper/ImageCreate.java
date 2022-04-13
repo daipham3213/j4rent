@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ImageLoad {
+public class ImageCreate {
     private String title;
 
     private MultipartFile file;

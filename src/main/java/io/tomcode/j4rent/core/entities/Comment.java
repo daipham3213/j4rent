@@ -1,11 +1,9 @@
 package io.tomcode.j4rent.core.entities;
 
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Comment")
@@ -27,7 +25,22 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "parent_n")
-    private Comment parent_n;
+    private Comment parentN;
+
+    public Comment(Album album, String content) {
+        this.album=album;
+        this.contents=content;
+    }
+
+    public Comment(Post post, String content) {
+        this.post=post;
+        this.contents=content;
+    }
+
+    public Comment(Comment comment, String content) {
+        this.parentN=comment;
+        this.contents=content;
+    }
 
 //    @ManyToOne
 //    @JoinColumn(name = "parent_n", nullable = false)

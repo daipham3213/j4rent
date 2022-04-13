@@ -19,7 +19,7 @@ public class Image extends BaseEntity {
     @Column(name = "caption")
     private String caption;
     @Column(name = "is_hidden")
-    private String isHidden;
+    private Boolean isHidden;
 
     public Image(String caption,String url) {
         this.caption=caption;

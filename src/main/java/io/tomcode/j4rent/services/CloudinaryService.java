@@ -2,21 +2,24 @@ package io.tomcode.j4rent.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.tomcode.j4rent.core.services.ICloudinaryService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service("cloudinaryService")
-public class CloudinaryService {
+public class CloudinaryService implements ICloudinaryService {
 
-    @Autowired
-    private  Cloudinary cloudinary;
+    private final Cloudinary cloudinary;
+
+    public CloudinaryService(Cloudinary cloudinary) {
+        this.cloudinary = cloudinary;
+    }
 
     public Map upload(MultipartFile multipartFile) throws IOException {
         File file = convert(multipartFile);
@@ -27,12 +30,11 @@ public class CloudinaryService {
 
 
     public Map delete(String id) throws IOException {
-        Map result = cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
-        return result;
+        return cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
     }
 
     private File convert(MultipartFile multipartFile) throws IOException {
-        File file = new File(multipartFile.getOriginalFilename());
+        File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         FileOutputStream fo = new FileOutputStream(file);
         fo.write(multipartFile.getBytes());
         fo.close();

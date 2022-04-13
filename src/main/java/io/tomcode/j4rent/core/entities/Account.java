@@ -58,13 +58,14 @@ public class Account extends BaseEntity implements UserDetails {
     @JoinColumn(name = "role_id")
     private  Role role;
 
-    @OneToMany(mappedBy = "createdById", orphanRemoval = true)
+
+    @OneToMany(mappedBy = "createdById", orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Album> albums = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    @OneToMany(mappedBy = "account", orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Workflow> workflows = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdById", orphanRemoval = true)
+    @OneToMany(mappedBy = "createdById", orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
 
     @Override

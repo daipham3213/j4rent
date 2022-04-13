@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AlbumLoad {
+public class AlbumCreate {
     String name;
 
-    String is_hidden;
+    Boolean isHidden;
 
-    List<ImageLoad> imageLoadList;
+    List<ImageCreate> images;
 }

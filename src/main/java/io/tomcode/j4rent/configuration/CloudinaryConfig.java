@@ -12,23 +12,22 @@ import java.util.Map;
 public class CloudinaryConfig {
 
     @Value("${app.cloudinary.name}")
-    private  String cloudinary_name;
+    private  String cloudinaryName;
 
     @Value("${app.cloudinary.api_key}")
-    private  String api_key;
+    private  String apiKey;
 
     @Value("${app.cloudinary.api_secret}")
-    private  String api_secret;
+    private  String apiSecret;
 
-    private  Map<String, String> valuesMap = new HashMap<>();
+    private final Map<String, String> valuesMap = new HashMap<>();
 
     @Bean(name = "cloudinary")
     public  Cloudinary cloudinary() {
-        valuesMap.put("cloud_name", cloudinary_name);
-        valuesMap.put("api_key", api_key);
-        valuesMap.put("api_secret", api_secret);
-        Cloudinary cloudinary = new Cloudinary(valuesMap);
-        return cloudinary;
+        valuesMap.put("cloud_name", cloudinaryName);
+        valuesMap.put("api_key", apiKey);
+        valuesMap.put("api_secret", apiSecret);
+        return new Cloudinary(valuesMap);
     }
 
 }

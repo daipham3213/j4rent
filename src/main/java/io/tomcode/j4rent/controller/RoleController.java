@@ -17,7 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(value = "/role")
-public class  RoleController {
+@CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
+public class RoleController {
     private final IRoleService roleService;
 
     public RoleController(IRoleService roleService) {
@@ -25,7 +26,7 @@ public class  RoleController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Role> createRole(@RequestBody  String role) {
+    public ResponseEntity<Role> createRole(@RequestBody String role) {
         try {
             Role newRole = roleService.createRole(role);
             return new ResponseEntity<>(newRole, HttpStatus.CREATED);
@@ -33,11 +34,11 @@ public class  RoleController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/")
     @ResponseBody
     public ResponseEntity<ResponseResult> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-                                                 @RequestParam(name = "sort", defaultValue = "") String sortBy) {
+                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<RoleDetails> pageRole = roleService.getAllRole(pageable);
@@ -46,9 +47,9 @@ public class  RoleController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Role> getRoleByName(@PathVariable String name) {
-        return new ResponseEntity<>(roleService.getRoleByName(name), HttpStatus.OK);
-    }
+//    @GetMapping("/name/{name}")
+//    public ResponseEntity<Role> getRoleByName(@PathVariable String name) {
+//        return new ResponseEntity<>(roleService.getRoleByName(name), HttpStatus.OK);
+//    }
 
 }

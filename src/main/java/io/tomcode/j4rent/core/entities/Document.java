@@ -2,6 +2,7 @@ package io.tomcode.j4rent.core.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import io.tomcode.j4rent.mapper.DocumentCreate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,4 +38,9 @@ public class Document extends BaseEntity {
 
     @OneToMany(mappedBy = "document", orphanRemoval = true)
     private List<Workflow> workflows = new ArrayList<>();
+
+    public Document(DocumentCreate document) {
+        this.documentCode = document.getDocumentCode();
+        this.data= document.getData();
+    }
 }
