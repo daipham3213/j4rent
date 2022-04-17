@@ -1,9 +1,16 @@
 package io.tomcode.j4rent.core.repositories;
 
+import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Role;
+import liquibase.pro.packaged.R;
+import org.hibernate.sql.Select;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -15,13 +22,16 @@ public interface RoleRepository extends BaseRepository<Role, UUID> {
 
     Role findByAccounts_IdEquals(UUID id);
 
-    boolean existsByRolePermissions_Permission_Name(String name);
+    String where = " r.id = :id and rp.role_id = r.id and rp.permissions_id =  p.id and  p.name = :name";
 
-    Role findByRolePermissions_Permission_NameIsAndAccounts_IdEquals(String name, UUID id);
+    @Query(value = "select distinct r  from Account a,Role  r , RolePermissions rp , Permission p where  a.id= :id and a.role.id = r.id and rp.role = r.id and rp.Permission = p.id and  p.name = :name" )
+//    List<Role> checkPermissionOfRole(@Param("id") UUID id, @Param("name") String name);
+    Role checkPermissionOfRole(@Param("id") UUID id, @Param("name") String name);
 
-    boolean existsByAccounts_IdEqualsAndRolePermissions_Permission_NameIs(UUID id, String name);
-
-    boolean existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(UUID id, String name);
+//    boolean existsByAccounts_IdEqualsAndRolePermissions_Permission_NameIs(UUID id, String name);
+//
+//    boolean existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(UUID id, String name);
+//
 
 
 }

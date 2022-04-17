@@ -42,4 +42,6 @@ public interface IAccountService {
     UserInfo updateUser(UserInfo info) throws IdIsNotFoundException;
 
     Image updateAvatar(MultipartFile file) throws IdIsNotFoundException, ImageFailException;
+
+    boolean checkUserPermission (UUID uuid , String namePermission );
 }

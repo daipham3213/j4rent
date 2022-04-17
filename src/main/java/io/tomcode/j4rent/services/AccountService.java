@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 @Service("accountService")
 public class AccountService implements IAccountService, UserDetailsService {
     private final AccountRepository accountRepository;
-
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
@@ -39,21 +38,26 @@ public class AccountService implements IAccountService, UserDetailsService {
     private final IOTPService otpService;
     private final IEmailService emailService;
     private final IJwtService jwtService;
+
     private final IRoleService roleService;
     private final IImageService imageService;
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, ModelMapper modelMapper, ObjectMapper objectMapper, IRoleService roleService, IImageService imageService) {
+    public AccountService(AccountRepository accountRepository, ModelMapper modelMapper, ObjectMapper objectMapper, PasswordEncoder passwordEncoder, IDocumentService documentService, IOTPService otpService, IEmailService emailService, IJwtService jwtService, IRoleService roleService, IImageService imageService) {
         this.accountRepository = accountRepository;
+        this.modelMapper = modelMapper;
+        this.objectMapper = objectMapper;
         this.passwordEncoder = passwordEncoder;
         this.documentService = documentService;
         this.otpService = otpService;
         this.emailService = emailService;
         this.jwtService = jwtService;
-        this.modelMapper = modelMapper;
-        this.objectMapper = objectMapper;
         this.roleService = roleService;
         this.imageService = imageService;
     }
+
+
+
+
 
     @Override
     public Iterable<Account> getAllAccount() {
@@ -190,6 +194,18 @@ public class AccountService implements IAccountService, UserDetailsService {
         } else throw new IdIsNotFoundException();
     }
 
+    @Override
+    public boolean checkUserPermission(UUID uuid, String namePermission) {
+        if (roleService.checkRolePermission(uuid,namePermission))
+            return true;
+        return false;
+    }
+
+//    @Override
+//    public boolean checkUserPermission(UUID uuid, String namePermission) {
+//        return roleService.checkRolePermission(uuid,namePermission);
+//    }
+
 
     private Account populateAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -215,6 +231,8 @@ public class AccountService implements IAccountService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 account.getUsername(), account.getPassword(), grantedAuthorities);
     }
+
+
 
 
 }

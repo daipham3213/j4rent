@@ -3,6 +3,7 @@ package io.tomcode.j4rent.core.services;
 import io.tomcode.j4rent.exception.CommentIsNotFoundException;
 import io.tomcode.j4rent.exception.IdIsNotFoundException;
 import io.tomcode.j4rent.exception.IdUserIsNotFoundException;
+import io.tomcode.j4rent.exception.PermissionIsNoFound;
 import io.tomcode.j4rent.mapper.CommentCreate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface ICommentService {
 
     Page<CommentCreate> getComments(Pageable page, UUID uuid) throws IdIsNotFoundException;
 
-    CommentCreate updateComment(CommentCreate commentCreate) throws IdIsNotFoundException, CommentIsNotFoundException, IdUserIsNotFoundException;
+    CommentCreate updateComment (CommentCreate commentCreate) throws IdIsNotFoundException, CommentIsNotFoundException, IdUserIsNotFoundException, PermissionIsNoFound;
 
-    void deleteComment(UUID uuid) throws IdUserIsNotFoundException, CommentIsNotFoundException;
+    void deleteComment(UUID uuid) throws IdUserIsNotFoundException, CommentIsNotFoundException, PermissionIsNoFound;
 }

@@ -11,6 +11,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +83,7 @@ public class PostService implements IPostService {
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
             for (Post post : posts) {
-                results.add(convert(post));
+                results.add(modelMapper.map(post, PostDetails.class));
             }
         } else {
             return getAllPost(page, floorArea, min, max);
@@ -121,26 +123,26 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFoundException {
+    public PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFoundException, PermissionIsNoFound {
         checkFormatPost(post);
         Account account = accountService.getCurrentAccount();
         Post updatePost = postRepository.findPostById(post.getId());
-        if (account.getId().equals(updatePost.getCreatedById())) {
-            updatePost.setContents(post.getContents());
-            updatePost.setLatitude(post.getLatitude());
-            updatePost.setLongitude(post.getLongitude());
-            updatePost.setPrice(post.getPrice());
-            updatePost.setFloorArea(post.getFloorArea());
-            updatePost.setFurnitureStatus(post.getFurnitureStatus());
-            if (post.getAlbum() != null) {
-                Album updateAlbum = albumService.getAlbumById(updatePost.getAlbum().getId());
-                if (updateAlbum != null) {
-                    albumService.updateAlbum(new AlbumUpdate(updateAlbum, post.getAlbum()));
-                } else
-                    albumService.createAlbum(post.getAlbum());
-            }
-            return modelMapper.map(updatePost, PostDetails.class);
-        } else throw new UserPostsNotFoundException();
+        if (!accountService.checkUserPermission(account.getId(), "update")) throw new PermissionIsNoFound();
+        if (!account.getId().equals(updatePost.getCreatedById())) throw new UserPostsNotFoundException();
+        updatePost.setContents(post.getContents());
+        updatePost.setLatitude(post.getLatitude());
+        updatePost.setLongitude(post.getLongitude());
+        updatePost.setPrice(post.getPrice());
+        updatePost.setFloorArea(post.getFloorArea());
+        updatePost.setFurnitureStatus(post.getFurnitureStatus());
+        if (post.getAlbum() != null) {
+            Album updateAlbum = albumService.getAlbumById(updatePost.getAlbum().getId());
+            if (updateAlbum != null) {
+                albumService.updateAlbum(new AlbumUpdate(updateAlbum, post.getAlbum()));
+            } else
+                albumService.createAlbum(post.getAlbum());
+        }
+        return modelMapper.map(updatePost, PostDetails.class);
 
     }
 

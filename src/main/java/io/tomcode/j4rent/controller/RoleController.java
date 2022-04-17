@@ -45,9 +45,9 @@ public class RoleController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-//    @GetMapping("/name/{name}")
-//    public ResponseEntity<Role> getRoleByName(@PathVariable String name) {
-//        return new ResponseEntity<>(roleService.getRoleByName(name), HttpStatus.OK);
-//    }
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Role> getRoleByName(@PathVariable String name) {
+        return new ResponseEntity<>(roleService.getRoleByName(name), HttpStatus.OK);
+    }
 
 }

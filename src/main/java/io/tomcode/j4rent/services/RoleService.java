@@ -21,6 +21,7 @@ public class RoleService implements IRoleService {
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
 
+
     public RoleService(RoleRepository roleRepository, ModelMapper modelMapper) {
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
@@ -57,9 +58,10 @@ public class RoleService implements IRoleService {
 
 
     @Override
-    public boolean checkRolePermission(UUID uuid, String name) {
-
-        return roleRepository.existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(uuid, name);
+    public boolean checkRolePermission(UUID uuid,String name) {
+        if (roleRepository.checkPermissionOfRole(uuid,name)!= null)
+            return true;
+        return false;
     }
 
 

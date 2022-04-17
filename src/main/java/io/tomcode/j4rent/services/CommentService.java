@@ -12,6 +12,7 @@ import io.tomcode.j4rent.core.services.IPostService;
 import io.tomcode.j4rent.exception.CommentIsNotFoundException;
 import io.tomcode.j4rent.exception.IdIsNotFoundException;
 import io.tomcode.j4rent.exception.IdUserIsNotFoundException;
+import io.tomcode.j4rent.exception.PermissionIsNoFound;
 import io.tomcode.j4rent.mapper.CommentCreate;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -88,22 +89,25 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public CommentCreate updateComment(CommentCreate comment) throws CommentIsNotFoundException, IdUserIsNotFoundException {
+    public CommentCreate updateComment(CommentCreate comment) throws CommentIsNotFoundException, IdUserIsNotFoundException, PermissionIsNoFound {
         Comment commentUpdate = commentRepository.findCommentById(comment.getId());
         Account account = accountService.getCurrentAccount();
-        if (account.getId().equals(commentUpdate.getCreatedById())) throw new IdUserIsNotFoundException();
+
+        if (!account.getId().equals(commentUpdate.getCreatedById())) throw new IdUserIsNotFoundException();
         if (commentUpdate == null) throw new CommentIsNotFoundException();
+        if (!accountService.checkUserPermission(account.getId(), "update")) throw new PermissionIsNoFound();
         commentUpdate.setContents(comment.getContents());
         commentRepository.save(commentUpdate);
         return modelMapper.map(comment, CommentCreate.class);
     }
 
     @Override
-    public void deleteComment(UUID uuid) throws IdUserIsNotFoundException, CommentIsNotFoundException {
+    public void deleteComment(UUID uuid) throws IdUserIsNotFoundException, CommentIsNotFoundException, PermissionIsNoFound {
         Comment comment = commentRepository.findCommentById(uuid);
         Account account = accountService.getCurrentAccount();
         if (comment == null) throw new CommentIsNotFoundException();
         if (!account.getId().equals(comment.getCreatedById())) throw new IdUserIsNotFoundException();
+        if (!accountService.checkUserPermission(account.getId(), "delete")) throw new PermissionIsNoFound();
         commentRepository.deleteAllByParentN(comment.getId());
         commentRepository.delete(comment);
     }
