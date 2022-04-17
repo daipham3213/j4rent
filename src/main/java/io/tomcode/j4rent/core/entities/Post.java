@@ -5,6 +5,7 @@ import io.tomcode.j4rent.mapper.PostDetails;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @Table(name = "post")
 @Getter
 @Setter
-public class Post extends BaseEntity {
+public class Post extends BaseEntity implements Serializable {
 
     @Column(name = "contents")
     private String contents;

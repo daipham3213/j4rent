@@ -56,9 +56,6 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
 
-
-
-
     @Override
     public Iterable<Account> getAllAccount() {
         return accountRepository.findAll();
@@ -67,7 +64,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     @Override
     public OTP register(Register account) throws PhoneNumberExistsException, UsernameExistsException, EmailIsExistsException {
         checkAccountExists(account);
-        Document document = documentService.createDocument("ACCOUNT", account);
+        Document document = documentService.createDocument("account", account);
         OTP otp = otpService.createOTP(document.getId());
         emailService.sendEmail(account.getEmail(), "This is the otp for authentication", " OTP : " + otp.getOtp());
         return otp;
@@ -166,6 +163,8 @@ public class AccountService implements IAccountService, UserDetailsService {
         return null;
     }
 
+
+
     @Override
     public UserInfo getCurrentUserInfo() {
         Account account = getCurrentAccount();
@@ -196,24 +195,22 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     public boolean checkUserPermission(UUID uuid, String namePermission) {
-        if (roleService.checkRolePermission(uuid,namePermission))
-            return true;
-        return false;
+        return roleService.checkRolePermission(uuid, namePermission);
     }
 
-//    @Override
-//    public boolean checkUserPermission(UUID uuid, String namePermission) {
-//        return roleService.checkRolePermission(uuid,namePermission);
-//    }
+    @Override
+    public void logout() {
+        Authentication authentication = getAuthentication();
+    }
 
 
     private Account populateAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setVerify(true);
         account.setAdmin(false);
-        if (roleService.getRoleByName("USER") == null)
-            roleService.createRole("USER");
-        account.setRole(roleService.getRoleByName("USER"));
+        if (roleService.getRoleByName("user") == null)
+            roleService.createRole("user");
+        account.setRole(roleService.getRoleByName("user"));
         return accountRepository.save(account);
     }
 
@@ -231,8 +228,6 @@ public class AccountService implements IAccountService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 account.getUsername(), account.getPassword(), grantedAuthorities);
     }
-
-
 
 
 }

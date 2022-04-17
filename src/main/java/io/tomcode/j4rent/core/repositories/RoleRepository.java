@@ -24,14 +24,9 @@ public interface RoleRepository extends BaseRepository<Role, UUID> {
 
     String where = " r.id = :id and rp.role_id = r.id and rp.permissions_id =  p.id and  p.name = :name";
 
-    @Query(value = "select distinct r  from Account a,Role  r , RolePermissions rp , Permission p where  a.id= :id and a.role.id = r.id and rp.role = r.id and rp.Permission = p.id and  p.name = :name" )
-//    List<Role> checkPermissionOfRole(@Param("id") UUID id, @Param("name") String name);
-    Role checkPermissionOfRole(@Param("id") UUID id, @Param("name") String name);
+//    @Query(value = "select distinct r  from Account a,Role  r , RolePermissions rp , Permission p where  a.id= :id and a.role.id = r.id and rp.role.id = r.id and rp.permission.id = p.id and  p.name = :name" )
+//    Role checkPermissionOfRole(@Param("id") UUID id, @Param("name") String name);
 
-//    boolean existsByAccounts_IdEqualsAndRolePermissions_Permission_NameIs(UUID id, String name);
-//
-//    boolean existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(UUID id, String name);
-//
-
+    boolean existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(UUID id, String name);
 
 }

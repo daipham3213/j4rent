@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 public interface ICommentService {
 
-    CommentCreate createComment(CommentCreate commentCreate) throws IdIsNotFoundException;
+    CommentCreate createComment(CommentCreate commentCreate) throws IdIsNotFoundException, PermissionIsNoFound;
 
     Page<CommentCreate> getComments(Pageable page, UUID uuid) throws IdIsNotFoundException;
 

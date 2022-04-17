@@ -44,4 +44,6 @@ public interface IAccountService {
     Image updateAvatar(MultipartFile file) throws IdIsNotFoundException, ImageFailException;
 
     boolean checkUserPermission (UUID uuid , String namePermission );
+
+    void logout();
 }

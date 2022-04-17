@@ -30,12 +30,12 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Iterable<Account>> getAll() {
-        Authentication auth = accountService.getAuthentication();
-
-        return new ResponseEntity<>(accountService.getAllAccount(), HttpStatus.OK);
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<Iterable<Account>> getAll() {
+//        Authentication auth = accountService.getAuthentication();
+//
+//        return new ResponseEntity<>(accountService.getAllAccount(), HttpStatus.OK);
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseResult> register(@RequestBody Register register) {

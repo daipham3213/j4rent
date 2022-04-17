@@ -12,8 +12,8 @@ import java.util.UUID;
 
 @Repository
 public interface PostRepository extends BaseRepository<Post, UUID> {
-    String HAVERSINE_PART = "(3956 * 2 * ASIN(SQRT( POWER(SIN((:latitude - abs(p.latitude)) * pi()/180 / 2), 2) + COS(:longitude * pi()/180 ) * COS(abs(p.latitude) * pi()/180)  * POWER(SIN((:longitude - p.longitude) * pi()/180 / 2), 2) )))";
-
+    String HAVERSINE_FORMULA = "(6371 * acos(cos(radians(:latitude)) * cos(radians(s.latitude)) *" +
+            " cos(radians(s.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(s.latitude))))";
     List<Post> findByCreatedByIdEquals(UUID createdById);
 
     List<Post> findByCreatedByIdEquals(UUID createdById, Pageable pageable);
@@ -33,6 +33,6 @@ public interface PostRepository extends BaseRepository<Post, UUID> {
     @Query(value = "SELECT distinct id from Comment  where parentN.id=:id")
     List<UUID> findComment(@Param("id") UUID uuid);
 
-    @Query(value = "select distinct p from Post p where p.price between :min and :max and p.floorArea between 0 and :floorArea and :distance >= " + HAVERSINE_PART + " ")
-    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea, @Param("min") BigInteger min, @Param("max") BigInteger max);
+    @Query(value = "SELECT s FROM Post s WHERE " + HAVERSINE_FORMULA + " <= :distance and (s.price between :min and :max) and (s.floorArea between 0 and :floorArea) ORDER BY "+ HAVERSINE_FORMULA + " DESC")
+    List<Post> findPostsByCoordinates(@Param("distance") double distance, @Param("latitude") double latitude, @Param("longitude") double longitude, @Param("floorArea") float floorArea, @Param("min") BigInteger min, @Param("max") BigInteger max, Pageable pageable);
 }

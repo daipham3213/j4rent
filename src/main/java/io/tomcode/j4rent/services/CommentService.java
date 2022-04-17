@@ -44,10 +44,12 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public CommentCreate createComment(CommentCreate commentCreate) throws IdIsNotFoundException {
+    public CommentCreate createComment(CommentCreate commentCreate) throws IdIsNotFoundException, PermissionIsNoFound {
         Album album = albumService.getAlbumById(commentCreate.getId());
         Post post = postService.getPostById(commentCreate.getId());
         Comment comment = commentRepository.findCommentById(commentCreate.getId());
+        Account account = accountService.getCurrentAccount();
+        if (!accountService.checkUserPermission(account.getId(), "create")) throw new PermissionIsNoFound();
         Comment create;
         if (album != null || post != null || comment != null) {
             if (album != null || comment != null) {
@@ -92,7 +94,6 @@ public class CommentService implements ICommentService {
     public CommentCreate updateComment(CommentCreate comment) throws CommentIsNotFoundException, IdUserIsNotFoundException, PermissionIsNoFound {
         Comment commentUpdate = commentRepository.findCommentById(comment.getId());
         Account account = accountService.getCurrentAccount();
-
         if (!account.getId().equals(commentUpdate.getCreatedById())) throw new IdUserIsNotFoundException();
         if (commentUpdate == null) throw new CommentIsNotFoundException();
         if (!accountService.checkUserPermission(account.getId(), "update")) throw new PermissionIsNoFound();

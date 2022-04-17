@@ -53,7 +53,9 @@ public class PostService implements IPostService {
         Post post = new Post(postCreate);
         post.setAlbum(album);
         post.setCreatedById(account.getId());
-        documentService.createDocument("POST", post);
+        PostDetails postDetails= modelMapper.map(post, PostDetails.class);
+        postDetails.setCreatedBy(modelMapper.map(account, UserInfo.class));
+        documentService.createDocument("post", postDetails);
         return modelMapper.map(post, PostView.class);
     }
 
@@ -79,11 +81,11 @@ public class PostService implements IPostService {
 
     @Override
     public Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) {
-        List<Post> posts = postRepository.findPostsByCoordinates(distance, latitude, longitude, floorArea, min, max);
+        List<Post> posts = postRepository.findPostsByCoordinates(distance, latitude, longitude, floorArea, min, max, page);
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
             for (Post post : posts) {
-                results.add(modelMapper.map(post, PostDetails.class));
+                results.add(convert(post));
             }
         } else {
             return getAllPost(page, floorArea, min, max);
@@ -143,7 +145,6 @@ public class PostService implements IPostService {
                 albumService.createAlbum(post.getAlbum());
         }
         return modelMapper.map(updatePost, PostDetails.class);
-
     }
 
     @Override

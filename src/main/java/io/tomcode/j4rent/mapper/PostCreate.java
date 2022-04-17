@@ -27,9 +27,5 @@ public class PostCreate {
 
     private String furnitureStatus;
 
-    private UUID createdById;
-
-    private Date createdAt;
-
     private AlbumCreate album;
 }

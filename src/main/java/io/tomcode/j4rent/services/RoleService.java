@@ -58,10 +58,8 @@ public class RoleService implements IRoleService {
 
 
     @Override
-    public boolean checkRolePermission(UUID uuid,String name) {
-        if (roleRepository.checkPermissionOfRole(uuid,name)!= null)
-            return true;
-        return false;
+    public boolean checkRolePermission(UUID uuid, String name) {
+       return roleRepository.existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(uuid, name);
     }
 
 
