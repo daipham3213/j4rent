@@ -1,5 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
+import io.tomcode.j4rent.mapper.ImageView;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +34,8 @@ public class Image extends BaseEntity {
     }
 
 
+    public Image(ImageView image) {
+        this.url = image.getUrl();
+        this.caption = image.getCaption();
+    }
 }

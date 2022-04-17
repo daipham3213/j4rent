@@ -5,6 +5,7 @@ import io.tomcode.j4rent.core.repositories.ImageRepository;
 import io.tomcode.j4rent.core.services.IImageService;
 import io.tomcode.j4rent.exception.ImageFailException;
 import io.tomcode.j4rent.mapper.ImageCreate;
+import io.tomcode.j4rent.mapper.ImageView;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,12 @@ public class ImageService implements IImageService {
             throw new ImageFailException();
         }
 
+    }
+
+    @Override
+    public Image create(ImageView image) {
+        Image imageCreate = new Image(image);
+        return imageRepository.save(imageCreate);
     }
 
 

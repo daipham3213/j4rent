@@ -19,6 +19,7 @@ import java.util.UUID;
 public interface IPostService {
     PostView createPost(PostCreate post) throws LatitudeException, LongitudeException, ImageFailException, FloorAreaIncorrectValue, PriceIncorrectValue, UserPostsNotFoundException, PermissionIsNoFound;
 
+    PostView createPost(Post post);
     Post getPostById(UUID id);
 
     Page<PostDetails> getAllPost(Pageable page);
@@ -34,4 +35,6 @@ public interface IPostService {
     PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFoundException, PermissionIsNoFound;
 
     void deletePost(UUID uuid) throws UserPostsNotFoundException, IdIsNotFoundException, PermissionIsNoFound, IdUserIsNotFoundException;
+
+    PostDetails createPostFromDocument(UUID uuid) throws DocumentIsNotFoundException, ImageFailException;
 }

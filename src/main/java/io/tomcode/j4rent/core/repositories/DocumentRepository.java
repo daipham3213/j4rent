@@ -8,6 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface DocumentRepository extends BaseRepository<Document, UUID> {
+    Document findByIdEqualsAndDocumentCodeEquals(UUID id, String documentCode);
     Document findDocumentById(UUID uuid);
 
     List<Document> findByCreatedByIdIsAndDocumentCodeEquals(UUID createdById, String documentCode);
@@ -17,8 +18,6 @@ public interface DocumentRepository extends BaseRepository<Document, UUID> {
     @Override
     void deleteById(UUID uuid);
 
-    //    @Modifying
-//    @Query(value = "delete ")
     void deleteAllByDocumentCode(String code);
 
 

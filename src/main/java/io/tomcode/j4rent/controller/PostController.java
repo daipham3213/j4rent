@@ -119,4 +119,13 @@ public class PostController {
         }
     }
 
+    @PostMapping("/createPost")
+    public ResponseEntity<ResponseResult> createPostByDocument(@RequestBody UUID idDocument) {
+        try {
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", postService.createPostFromDocument(idDocument)), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
 }

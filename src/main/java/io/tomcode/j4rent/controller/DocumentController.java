@@ -58,13 +58,14 @@ public class DocumentController {
         }
     }
 
-    @DeleteMapping("/detele")
-    public ResponseEntity<ResponseResult> deteleDocument(@RequestBody UUID id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseResult> deleteDocument(@RequestBody UUID id) {
         try {
             documentService.deleteOTPAndDocument(id);
-            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Deteled document"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Delete document : "+ id), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
 }

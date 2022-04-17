@@ -154,6 +154,7 @@ public class AccountService implements IAccountService, UserDetailsService {
             claims.put("userId", account.getId().toString());
 
             String jwt = jwtService.createJwtForClaims(userDetails.getUsername(), claims);
+//            String refreshToken = jwtService.refreshToken(jwt);
             return new JwtResponse(jwt);
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");

@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tomcode.j4rent.core.entities.Document;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.DocumentRepository;
+import io.tomcode.j4rent.core.services.IAlbumService;
 import io.tomcode.j4rent.core.services.IDocumentService;
 import io.tomcode.j4rent.core.services.IOTPService;
-import io.tomcode.j4rent.core.services.IRoleService;
+import io.tomcode.j4rent.core.services.IPostService;
+import io.tomcode.j4rent.exception.DocumentIsNotFoundException;
+import io.tomcode.j4rent.exception.ImageFailException;
 import io.tomcode.j4rent.mapper.DocumentCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import org.modelmapper.ModelMapper;
@@ -30,16 +33,16 @@ public class DocumentService implements IDocumentService {
     private final ObjectMapper mapper;
     private final IOTPService otpService;
 
-    private final IRoleService roleService;
+    private final IAlbumService albumService;
 
-    public DocumentService(DocumentRepository documentRepository, ModelMapper modelMapper, ObjectMapper mapper, IOTPService otpService, IRoleService roleService) {
+
+    public DocumentService(DocumentRepository documentRepository, ModelMapper modelMapper, ObjectMapper mapper, IOTPService otpService, IAlbumService albumService) {
         this.documentRepository = documentRepository;
         this.modelMapper = modelMapper;
         this.mapper = mapper;
         this.otpService = otpService;
-        this.roleService = roleService;
+        this.albumService = albumService;
     }
-
 
     @Override
     public Document createDocument(Document Document) {
@@ -84,6 +87,13 @@ public class DocumentService implements IDocumentService {
     }
 
     @Override
+    public Document getDocument(UUID documentId, String code) throws DocumentIsNotFoundException {
+        Document document = documentRepository.findByIdEqualsAndDocumentCodeEquals(documentId, code);
+        if (document == null) throw new DocumentIsNotFoundException();
+        return document;
+    }
+
+    @Override
     public Page<PostDetails> getPostCreatedInDocument(Pageable page, UUID uuid) {
         List<Document> list = documentRepository.findByCreatedByIdIsAndDocumentCodeEquals(uuid, "post");
         List<PostDetails> postDetails = new ArrayList<>();
@@ -94,8 +104,6 @@ public class DocumentService implements IDocumentService {
             postDetails.add(modelMapper.map(post, PostDetails.class));
         }
         return new PageImpl<>(postDetails, page, page.getPageSize());
-
-
     }
 
     @Override

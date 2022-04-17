@@ -1,16 +1,17 @@
 package io.tomcode.j4rent.services;
 
 import io.tomcode.j4rent.core.entities.Album;
+import io.tomcode.j4rent.core.entities.Image;
 import io.tomcode.j4rent.core.repositories.AlbumRepository;
 import io.tomcode.j4rent.core.services.IAlbumService;
 import io.tomcode.j4rent.core.services.IImageService;
 import io.tomcode.j4rent.exception.ImageFailException;
-import io.tomcode.j4rent.mapper.AlbumCreate;
-import io.tomcode.j4rent.mapper.AlbumUpdate;
-import io.tomcode.j4rent.mapper.ImageCreate;
+import io.tomcode.j4rent.mapper.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Transactional
@@ -36,6 +37,17 @@ public class AlbumService implements IAlbumService {
         for (ImageCreate image : albumLoad.getImages()) {
             album.getImages().add(imageService.upload(image));
         }
+        return albumRepository.save(album);
+    }
+
+    @Override
+    public Album createAlbum(AlbumView albumCreate) {
+        Album album = new Album();
+        List<Image> imageList = new ArrayList<>();
+        for (ImageView image : albumCreate.getImages()) {
+            imageList.add(imageService.create(image));
+        }
+        album.setImages(imageList);
         return albumRepository.save(album);
     }
 

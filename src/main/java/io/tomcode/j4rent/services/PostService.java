@@ -1,7 +1,9 @@
 package io.tomcode.j4rent.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Album;
+import io.tomcode.j4rent.core.entities.Document;
 import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.PostRepository;
 import io.tomcode.j4rent.core.services.*;
@@ -14,7 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
@@ -27,6 +28,7 @@ import java.util.UUID;
 public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
+    private final ObjectMapper mapper;
     private final IAlbumService albumService;
     private final IDocumentService documentService;
     private final IAccountService accountService;
@@ -34,9 +36,10 @@ public class PostService implements IPostService {
     private final IRoleService roleService;
 
 
-    public PostService(PostRepository postRepository, ModelMapper modelMapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService, IRoleService roleService) {
+    public PostService(PostRepository postRepository, ModelMapper modelMapper, ObjectMapper mapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService, IRoleService roleService) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
+        this.mapper = mapper;
         this.albumService = albumService;
         this.documentService = documentService;
         this.accountService = accountService;
@@ -56,6 +59,12 @@ public class PostService implements IPostService {
         PostDetails postDetails= modelMapper.map(post, PostDetails.class);
         postDetails.setCreatedBy(modelMapper.map(account, UserInfo.class));
         documentService.createDocument("post", postDetails);
+        return modelMapper.map(post, PostView.class);
+    }
+
+    @Override
+    public PostView createPost(Post post) {
+        postRepository.save(post);
         return modelMapper.map(post, PostView.class);
     }
 
@@ -156,6 +165,17 @@ public class PostService implements IPostService {
         if (account.getId() != post.getCreatedById()) throw new UserPostsNotFoundException();
         postRepository.delete(post);
 
+    }
+
+    @Override
+    public PostDetails createPostFromDocument(UUID uuid) throws DocumentIsNotFoundException, ImageFailException {
+            Document document = documentService.getDocument(uuid, "post");
+            if (document == null) throw new DocumentIsNotFoundException();
+            PostDetails post = mapper.convertValue(document.getData(), PostDetails.class);
+            Post createPost = new Post(post);
+            createPost.setAlbum(albumService.createAlbum(post.getAlbum()));
+            createPost(createPost);
+            return post;
     }
 
     @Override
