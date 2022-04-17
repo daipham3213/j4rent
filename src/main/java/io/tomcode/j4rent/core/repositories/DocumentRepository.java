@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 @Repository
-public interface DocumentRepository extends JpaRepository<Document, UUID> {
+public interface DocumentRepository extends BaseRepository<Document, UUID> {
     Document findDocumentById(UUID uuid);
 
     List<Document> findByCreatedByIdIsAndDocumentCodeEquals(UUID createdById, String documentCode);

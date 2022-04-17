@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface AlbumRepository extends JpaRepository<Album, UUID> {
+public interface AlbumRepository extends BaseRepository<Album, UUID> {
     Album findAlbumById(UUID uuid);
 }

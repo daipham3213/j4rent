@@ -25,14 +25,17 @@ public class Role extends BaseEntity implements GrantedAuthority {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    Set<Account> accounts = new HashSet<>();
+    List<Account> accounts = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<RolePermissions> rolePermissions = new ArrayList<>();
+
+    
 
     public Role(String role) {
         this.name = role;
     }
-//
-//    @OneToMany(mappedBy = "role", orphanRemoval = true,fetch = FetchType.LAZY)
-//    private List<RolePermissions> rolePermissions = new ArrayList<>();
 
     @Override
     public String getAuthority() {

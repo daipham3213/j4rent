@@ -1,11 +1,11 @@
 package io.tomcode.j4rent.controller;
 
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.tomcode.j4rent.core.entities.Post;
+//import io.swagger.v3.oas.annotations.media.Content;
+//import io.swagger.v3.oas.annotations.media.Schema;
+//import io.swagger.v3.oas.annotations.responses.ApiResponse;
+//import io.swagger.v3.oas.annotations.responses.ApiResponses;
+//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+//import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IPostService;
 import io.tomcode.j4rent.mapper.*;
@@ -20,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/post")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
@@ -79,7 +81,7 @@ public class PostController {
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
             @RequestParam(name = "floorArea", required = false, defaultValue = "500") float floorArea,
             @RequestParam(name = "minPrice", required = false, defaultValue = "0") BigInteger minPrice,
-            @RequestParam(name = "maxPrice", required = false, defaultValue = "5000000") BigInteger maxPrice,
+            @RequestParam(name = "maxPrice", required = false, defaultValue = "500000000") BigInteger maxPrice,
             @RequestParam(name = "distance", required = false, defaultValue = "5") double distance,
             @RequestParam(name = "latitude", required = false, defaultValue = "0") double latitude,
             @RequestParam(name = "longitude", required = false, defaultValue = "0") double longitude
@@ -98,7 +100,17 @@ public class PostController {
     public ResponseEntity<ResponseResult> updatePost(@RequestBody PostUpdate post) {
 
         try {
-            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", updatePost(post)), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", postService.updatePost(post)), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseResult> deletePost(@RequestBody UUID idPost) {
+        try {
+            postService.deletePost(idPost);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Deleted post with ID: "+ idPost), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

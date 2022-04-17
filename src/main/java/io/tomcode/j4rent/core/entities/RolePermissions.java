@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
+//@Embeddable
 @Entity(name = "RolePermissions")
 @Table(name = "role_permissions")
 @Getter

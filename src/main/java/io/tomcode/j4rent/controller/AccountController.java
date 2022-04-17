@@ -75,7 +75,7 @@ public class AccountController {
         return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", response), HttpStatus.OK);
     }
 
-    @PutMapping( "/updateUser")
+    @PatchMapping( "/updateUser")
     public ResponseEntity<ResponseResult> login(@RequestBody UserInfo info) {
         try {
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateUser(info)), HttpStatus.OK);

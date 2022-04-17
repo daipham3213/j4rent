@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Transactional
 @Service("roleService")
@@ -47,6 +48,18 @@ public class RoleService implements IRoleService {
     @Override
     public Role getRoleByName(String name) {
         return roleRepository.findRoleByName(name);
+    }
+
+    @Override
+    public Role getRoleByIdUser(UUID uuid) {
+        return null;
+    }
+
+
+    @Override
+    public boolean checkRolePermission(UUID uuid,String name) {
+
+        return roleRepository.existsByAccounts_IdIsAndRolePermissions_Permission_NameIsAllIgnoreCase(uuid,name);
     }
 
 

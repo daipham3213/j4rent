@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, UUID> {
+public interface PostRepository extends BaseRepository<Post, UUID> {
     List<Post> findByCreatedByIdEquals(UUID createdById);
 
     List<Post> findByCreatedByIdEquals(UUID createdById, Pageable pageable);

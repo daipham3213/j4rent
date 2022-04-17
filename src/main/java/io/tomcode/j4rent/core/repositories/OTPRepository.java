@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface OTPRepository extends JpaRepository<OTP, UUID> {
+public interface OTPRepository extends BaseRepository<OTP, UUID> {
     OTP findOTPByOtp(int otp);
 
     List<OTP> findOTPSByOtp(int otp);

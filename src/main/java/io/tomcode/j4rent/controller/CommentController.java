@@ -59,4 +59,14 @@ public class CommentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseResult> deleteComment(@RequestBody UUID id){
+        try {
+            commentService.deleteComment(id);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "","Removed comment with ID :"+ id), HttpStatus.OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }

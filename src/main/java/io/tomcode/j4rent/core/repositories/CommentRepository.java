@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, UUID> {
+public interface CommentRepository extends BaseRepository<Comment, UUID> {
     Comment findCommentById(UUID uuid);
 
     List<Comment> findAllByAlbum(Album album);
@@ -26,4 +26,8 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
     @Modifying
     @Query("update Comment u set u.contents =:contents where u.id = :id")
     void updateComment(@Param("id") UUID id, @Param("contents") String contents );
+
+    void deleteAllByParentN(UUID uuid) ;
+
+
 }

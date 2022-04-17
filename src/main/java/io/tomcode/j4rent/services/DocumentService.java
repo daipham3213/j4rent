@@ -8,6 +8,7 @@ import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.repositories.DocumentRepository;
 import io.tomcode.j4rent.core.services.IDocumentService;
 import io.tomcode.j4rent.core.services.IOTPService;
+import io.tomcode.j4rent.core.services.IRoleService;
 import io.tomcode.j4rent.mapper.DocumentCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import org.modelmapper.ModelMapper;
@@ -28,11 +29,14 @@ public class DocumentService implements IDocumentService {
     private final ObjectMapper mapper;
     private final IOTPService otpService;
 
-    public DocumentService(DocumentRepository documentRepository, ModelMapper modelMapper, ObjectMapper mapper, IOTPService otpService) {
+    private final IRoleService roleService;
+
+    public DocumentService(DocumentRepository documentRepository, ModelMapper modelMapper, ObjectMapper mapper, IOTPService otpService, IRoleService roleService) {
         this.documentRepository = documentRepository;
         this.modelMapper = modelMapper;
         this.mapper = mapper;
         this.otpService = otpService;
+        this.roleService = roleService;
     }
 
 

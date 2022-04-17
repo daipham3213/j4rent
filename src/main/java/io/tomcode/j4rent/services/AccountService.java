@@ -60,7 +60,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public OTP register(Register account) throws PhoneNumberExistsException, UsernameExistsException, EmailExistsException {
+    public OTP register(Register account) throws PhoneNumberExistsException, UsernameExistsException, EmailIsExistsException {
         checkAccountExists(account);
         Document document = documentService.createDocument("ACCOUNT", account);
         OTP otp = otpService.createOTP(document.getId());
@@ -77,7 +77,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public UserInfo createAccount(CreateAccount account) throws InvalidOTPException, IdCardExistsException {
+    public UserInfo createAccount(CreateAccount account) throws InvalidOTPException, IdCardIsExistsException {
         OTP otp = otpService.getOTP(account.getOtp());
         Document document = documentService.getDocument(otp.getDocumentId());
         Register register = objectMapper.convertValue(document.getData(), Register.class);
@@ -92,12 +92,12 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public Boolean checkAccountExists(Register register) throws UsernameExistsException, PhoneNumberExistsException, EmailExistsException {
+    public Boolean checkAccountExists(Register register) throws UsernameExistsException, PhoneNumberExistsException, EmailIsExistsException {
         if (accountRepository.findAccountByUsername(register.getUsername()) != null) {
             throw new UsernameExistsException();
         } else {
             if (accountRepository.findByEmailEquals(register.getEmail()) != null) {
-                throw new EmailExistsException();
+                throw new EmailIsExistsException();
             } else if (accountRepository.findByPhoneNumberEquals(register.getPhoneNumber()) != null)
                 throw new PhoneNumberExistsException();
         }
@@ -105,9 +105,9 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public void checkUserInfo(CreateAccount account) throws IdCardExistsException {
+    public void checkUserInfo(CreateAccount account) throws IdCardIsExistsException {
         if (accountRepository.findByIdCardEquals(account.getIdCard())!=null){
-            throw  new IdCardExistsException();
+            throw  new IdCardIsExistsException();
         }
     }
 
@@ -169,7 +169,7 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public UserInfo updateUser(UserInfo info) throws IdNotFoundException {
+    public UserInfo updateUser(UserInfo info) throws IdIsNotFoundException {
         Account account = getCurrentAccount();
         if (account!= null){
             account.setFirstName(info.getFirstName());
@@ -179,16 +179,16 @@ public class AccountService implements IAccountService, UserDetailsService {
             account.setGender(info.getGender());
             return modelMapper.map(account, UserInfo.class);
         }
-        else throw new IdNotFoundException();
+        else throw new IdIsNotFoundException();
     }
 
-    public Image updateAvatar(MultipartFile file) throws IdNotFoundException, ImageFailException {
+    public Image updateAvatar(MultipartFile file) throws IdIsNotFoundException, ImageFailException {
         Account account = getCurrentAccount();
         ImageCreate imageCreate = new ImageCreate( "Avatar by: " + account.getId(),file);
         if (account!= null) {
             return imageService.upload(imageCreate);
         }
-        else throw new IdNotFoundException();
+        else throw new IdIsNotFoundException();
     }
 
 

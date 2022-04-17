@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-@Controller
+@RestController
 @RequestMapping("/image")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
 public class ImageController {

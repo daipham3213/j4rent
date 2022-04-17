@@ -1,5 +1,6 @@
 package io.tomcode.j4rent.core.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,10 @@ import java.util.List;
 public class Permission extends BaseEntity {
     @Column(name = "name")
     private String name;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "Permission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<RolePermissions> rolePermissions = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "Permission", orphanRemoval = true,fetch = FetchType.LAZY)
 //    private List<RolePermissions> rolePermissions = new ArrayList<>();

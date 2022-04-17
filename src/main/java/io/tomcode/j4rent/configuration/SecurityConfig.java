@@ -38,14 +38,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     config
                             .antMatchers(
                                     "/swagger-ui/**",
-                                    "/account/*",
-                                    "/document/*",
-                                    "/roles",
-                                    "/post"
-                            )
+                                    "/account/create",
+                                    "account/login",
+                                    "account/verify",
+                                    "account/register"
+                                    )
                             .permitAll()
-                            .anyRequest()
-                            .anonymous();
+                            .antMatchers(
+                                    "/post/delete",
+                                    "/post/create",
+                                    "/post/update",
+                                    "/post/created",
+                                    "comment/*",
+                                    "album/*",
+                                    "account/updateAvatar",
+                                    "account/updateUser",
+                                    "document/*",
+                                    "image/*"
+                                    ).authenticated();
 
                 })
                 .exceptionHandling()
@@ -68,9 +78,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return converter;
     }
-
-
-
 
 
 }

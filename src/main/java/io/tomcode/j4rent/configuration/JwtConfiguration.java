@@ -14,6 +14,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Date;
 
 @Slf4j
 @Configuration
@@ -29,6 +30,10 @@ public class JwtConfiguration {
 
     @Value("${app.security.jwt.private-key-passphrase}")
     private String privateKeyPassphrase;
+//
+//    @Value("${app.security.jwt.expiration.in.seconds}")
+//    private Long expiration;
+
 
     @Bean
     public KeyStore keyStore() {
@@ -78,6 +83,18 @@ public class JwtConfiguration {
     public JwtDecoder jwtDecoder(RSAPublicKey rsaPublicKey) {
         return NimbusJwtDecoder.withPublicKey(rsaPublicKey).build();
     }
+
+//    @Bean
+//    public String refreshToken(String token) {
+//        final Date createdDate = new Date(expiration * 1000);
+//        final Date expirationDate = calculateExpirationDate(createdDate);
+//
+//        final Claims claims = getAllClaimsFromToken(token);
+//        claims.setIssuedAt(createdDate);
+//        claims.setExpiration(expirationDate);
+//
+//        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
+//    }
 
 
 

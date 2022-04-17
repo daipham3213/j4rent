@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +26,8 @@ public class PostCreate {
     private String address;
 
     private String furnitureStatus;
+
+    private UUID createdById;
 
     private Date createdAt;
 

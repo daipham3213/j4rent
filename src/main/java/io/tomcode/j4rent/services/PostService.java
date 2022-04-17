@@ -20,32 +20,39 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 @Transactional
 @Service("postService")
 public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
-
     private final IAlbumService albumService;
     private final IDocumentService documentService;
     private final IAccountService accountService;
 
+    private final IRoleService roleService;
 
-    public PostService(PostRepository postRepository, ModelMapper modelMapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService) {
+
+    public PostService(PostRepository postRepository, ModelMapper modelMapper, IAlbumService albumService, IDocumentService documentService, IAccountService accountService, IRoleService roleService) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.albumService = albumService;
         this.documentService = documentService;
         this.accountService = accountService;
+        this.roleService = roleService;
     }
 
     @Override
-    public PostView createPost(PostCreate postCreate) throws ImageFailException, LatitudeException, LongitudeException, FloorAreaIncorrectValue, PriceIncorrectValue {
+    public PostView createPost(PostCreate postCreate) throws ImageFailException, LatitudeException, LongitudeException, FloorAreaIncorrectValue, PriceIncorrectValue, UserPostsNotFoundException, PermissionIsNoFound {
         checkFormatPost(postCreate);
+        Account account = accountService.getCurrentAccount();
+        if (account == null) throw new UserPostsNotFoundException();
+        if (roleService.checkRolePermission(account.getId(),"create")) throw new PermissionIsNoFound();
         Album album = albumService.createAlbum(postCreate.getAlbum());
         Post post = new Post(postCreate);
         post.setAlbum(album);
-        documentService.createDocument("POST",post);
+        post.setCreatedById(account.getId());
+        documentService.createDocument("POST", post);
         return modelMapper.map(post, PostView.class);
     }
 
@@ -71,10 +78,10 @@ public class PostService implements IPostService {
 
     @Override
     public Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) {
-        List<Post> posts = postRepository.findPostsByCoordinates(distance,latitude,longitude, floorArea, min, max);
+        List<Post> posts = postRepository.findPostsByCoordinates(distance, latitude, longitude, floorArea, min, max);
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
-            for (Post post: posts) {
+            for (Post post : posts) {
                 results.add(modelMapper.map(post, PostDetails.class));
             }
         } else {
@@ -84,10 +91,10 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page) throws IdNotFoundException {
+    public Page<PostDetails> getCreatedPosts(Pageable page) throws IdIsNotFoundException {
         Account account = accountService.getCurrentAccount();
         if (account == null)
-            throw new IdNotFoundException();
+            throw new IdIsNotFoundException();
         else {
             List<Post> posts = postRepository.findByCreatedByIdEquals(account.getId(), page);
             ArrayList<PostDetails> results = new ArrayList<>();
@@ -100,10 +107,10 @@ public class PostService implements IPostService {
 
 
     @Override
-    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdNotFoundException {
+    public Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdIsNotFoundException {
         Account account = accountService.getCurrentAccount();
         if (account == null)
-            throw new IdNotFoundException();
+            throw new IdIsNotFoundException();
         else {
             List<Post> posts = postRepository.findByCreatedByIdEqualsAndFloorAreaLessThanEqualAndPriceBetween(account.getId(), floorArea, min, max, page);
             ArrayList<PostDetails> results = new ArrayList<>();
@@ -135,6 +142,17 @@ public class PostService implements IPostService {
             }
             return modelMapper.map(updatePost, PostDetails.class);
         } else throw new UserPostsNotFoundException();
+
+    }
+
+    @Override
+    public void deletePost(UUID uuid) throws PermissionIsNoFound, IdUserIsNotFoundException, UserPostsNotFoundException {
+        Account account = accountService.getCurrentAccount();
+        Post post = postRepository.findPostById(uuid);
+        if (roleService.checkRolePermission(account.getId(),"delete")) throw new PermissionIsNoFound();
+        if (account == null) throw new IdUserIsNotFoundException();
+        if (account.getId() != post.getCreatedById()) throw new UserPostsNotFoundException();
+        postRepository.delete(post);
 
     }
 

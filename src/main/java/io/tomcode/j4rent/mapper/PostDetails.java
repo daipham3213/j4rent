@@ -34,7 +34,10 @@ public class PostDetails {
 
     private Date createdAt;
 
+    private UUID createdById;
+
     private int views;
+
 
     private AlbumView album;
 
