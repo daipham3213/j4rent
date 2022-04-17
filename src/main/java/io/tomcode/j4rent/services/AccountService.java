@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
+
 @Transactional
 @Service("accountService")
 public class AccountService implements IAccountService, UserDetailsService {
@@ -106,8 +107,8 @@ public class AccountService implements IAccountService, UserDetailsService {
 
     @Override
     public void checkUserInfo(CreateAccount account) throws IdCardIsExistsException {
-        if (accountRepository.findByIdCardEquals(account.getIdCard())!=null){
-            throw  new IdCardIsExistsException();
+        if (accountRepository.findByIdCardEquals(account.getIdCard()) != null) {
+            throw new IdCardIsExistsException();
         }
     }
 
@@ -171,24 +172,22 @@ public class AccountService implements IAccountService, UserDetailsService {
     @Override
     public UserInfo updateUser(UserInfo info) throws IdIsNotFoundException {
         Account account = getCurrentAccount();
-        if (account!= null){
+        if (account != null) {
             account.setFirstName(info.getFirstName());
             account.setLastName(info.getLastName());
             account.setDob(info.getDob());
             account.setIdCard(info.getIdCard());
             account.setGender(info.getGender());
             return modelMapper.map(account, UserInfo.class);
-        }
-        else throw new IdIsNotFoundException();
+        } else throw new IdIsNotFoundException();
     }
 
     public Image updateAvatar(MultipartFile file) throws IdIsNotFoundException, ImageFailException {
         Account account = getCurrentAccount();
-        ImageCreate imageCreate = new ImageCreate( "Avatar by: " + account.getId(),file);
-        if (account!= null) {
+        ImageCreate imageCreate = new ImageCreate("Avatar by: " + account.getId(), file);
+        if (account != null) {
             return imageService.upload(imageCreate);
-        }
-        else throw new IdIsNotFoundException();
+        } else throw new IdIsNotFoundException();
     }
 
 

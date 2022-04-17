@@ -1,7 +1,6 @@
 package io.tomcode.j4rent.core.repositories;
 
 import io.tomcode.j4rent.core.entities.OTP;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +14,6 @@ public interface OTPRepository extends BaseRepository<OTP, UUID> {
 
     void deleteAllByDocumentId(UUID uuid);
 
-    void  deleteOTPByDocumentId(UUID uuid);
+    void deleteOTPByDocumentId(UUID uuid);
 
 }

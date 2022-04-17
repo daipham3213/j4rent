@@ -1,8 +1,6 @@
 package io.tomcode.j4rent.controller;
 
-import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.entities.Document;
-import io.tomcode.j4rent.core.entities.Post;
 import io.tomcode.j4rent.core.services.IDocumentService;
 import io.tomcode.j4rent.mapper.DocumentCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
@@ -61,11 +59,11 @@ public class DocumentController {
     }
 
     @DeleteMapping("/detele")
-    public ResponseEntity<ResponseResult> deteleDocument(@RequestBody UUID id){
+    public ResponseEntity<ResponseResult> deteleDocument(@RequestBody UUID id) {
         try {
             documentService.deleteOTPAndDocument(id);
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Deteled document"), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

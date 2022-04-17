@@ -34,7 +34,7 @@ public class PostDetails {
 
     private Date createdAt;
 
-    private UUID createdById;
+    private UserInfo createdBy;
 
     private int views;
 

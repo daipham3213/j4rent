@@ -1,10 +1,13 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -11,9 +11,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.stereotype.Service;
-
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
@@ -47,7 +46,7 @@ public class PostService implements IPostService {
         checkFormatPost(postCreate);
         Account account = accountService.getCurrentAccount();
         if (account == null) throw new UserPostsNotFoundException();
-        if (roleService.checkRolePermission(account.getId(),"create")) throw new PermissionIsNoFound();
+        if (roleService.checkRolePermission(account.getId(), "create")) throw new PermissionIsNoFound();
         Album album = albumService.createAlbum(postCreate.getAlbum());
         Post post = new Post(postCreate);
         post.setAlbum(album);
@@ -82,7 +81,7 @@ public class PostService implements IPostService {
         List<PostDetails> results = new ArrayList<>();
         if (posts.size() > 0) {
             for (Post post : posts) {
-                results.add(modelMapper.map(post, PostDetails.class));
+                results.add(convert(post));
             }
         } else {
             return getAllPost(page, floorArea, min, max);
@@ -149,7 +148,7 @@ public class PostService implements IPostService {
     public void deletePost(UUID uuid) throws PermissionIsNoFound, IdUserIsNotFoundException, UserPostsNotFoundException {
         Account account = accountService.getCurrentAccount();
         Post post = postRepository.findPostById(uuid);
-        if (roleService.checkRolePermission(account.getId(),"delete")) throw new PermissionIsNoFound();
+        if (roleService.checkRolePermission(account.getId(), "delete")) throw new PermissionIsNoFound();
         if (account == null) throw new IdUserIsNotFoundException();
         if (account.getId() != post.getCreatedById()) throw new UserPostsNotFoundException();
         postRepository.delete(post);
@@ -188,6 +187,7 @@ public class PostService implements IPostService {
             count += sumComment(uuid);
         }
         PostDetails details = modelMapper.map(post, PostDetails.class);
+        details.setCreatedBy(modelMapper.map(accountService.getAccountById(post.getCreatedById()), UserInfo.class));
         details.setSumComment(count);
         return details;
     }

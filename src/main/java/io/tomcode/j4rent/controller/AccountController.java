@@ -4,7 +4,6 @@ package io.tomcode.j4rent.controller;
 import io.tomcode.j4rent.core.entities.Account;
 import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.mapper.*;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +74,7 @@ public class AccountController {
         return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", response), HttpStatus.OK);
     }
 
-    @PatchMapping( "/updateUser")
+    @PatchMapping("/updateUser")
     public ResponseEntity<ResponseResult> login(@RequestBody UserInfo info) {
         try {
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateUser(info)), HttpStatus.OK);
@@ -84,8 +83,9 @@ public class AccountController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PatchMapping("/updateAvatar")
-    public ResponseEntity<ResponseResult> updateAvatar(@RequestBody MultipartFile file){
+    public ResponseEntity<ResponseResult> updateAvatar(@RequestBody MultipartFile file) {
         try {
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateAvatar(file)), HttpStatus.OK);
 

@@ -1,10 +1,11 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Table(name = "attachment")
 @Getter
 @Setter
-public class Attachment  extends BaseEntity {
+public class Attachment extends BaseEntity {
 
     @Column(name = "url")
     private String url;

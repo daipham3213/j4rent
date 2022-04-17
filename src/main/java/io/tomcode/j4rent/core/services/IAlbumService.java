@@ -13,8 +13,8 @@ public interface IAlbumService {
 
     Album getAlbumById(UUID id);
 
-    Album createAlbum (AlbumCreate albumCreate) throws ImageFailException;
+    Album createAlbum(AlbumCreate albumCreate) throws ImageFailException;
 
-    Album updateAlbum (AlbumUpdate albumCreate) throws ImageFailException;
+    Album updateAlbum(AlbumUpdate albumCreate) throws ImageFailException;
 
 }

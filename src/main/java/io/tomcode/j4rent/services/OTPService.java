@@ -1,13 +1,12 @@
 package io.tomcode.j4rent.services;
 
+import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.core.repositories.OTPRepository;
 import io.tomcode.j4rent.core.services.IOTPService;
-import io.tomcode.j4rent.core.entities.OTP;
 import io.tomcode.j4rent.exception.InvalidOTPException;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 

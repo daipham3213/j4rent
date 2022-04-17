@@ -23,6 +23,6 @@ public class PostView {
 
     private String furnitureStatus;
 
-    private  AlbumView  album;
+    private AlbumView album;
 
 }

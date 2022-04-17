@@ -6,12 +6,11 @@ import io.tomcode.j4rent.mapper.ImageCreate;
 import io.tomcode.j4rent.mapper.ResponseResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+
 @RestController
 @RequestMapping("/image")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
 @Transactional
 @Service("albumService")
 public class AlbumService implements IAlbumService {
@@ -35,7 +36,7 @@ public class AlbumService implements IAlbumService {
         for (ImageCreate image : albumLoad.getImages()) {
             album.getImages().add(imageService.upload(image));
         }
-        return  albumRepository.save(album);
+        return albumRepository.save(album);
     }
 
     @Override

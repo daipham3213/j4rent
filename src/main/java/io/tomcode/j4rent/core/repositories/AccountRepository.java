@@ -4,7 +4,6 @@ import io.tomcode.j4rent.core.entities.Account;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository

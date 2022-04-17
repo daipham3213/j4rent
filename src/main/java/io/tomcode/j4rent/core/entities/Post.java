@@ -3,11 +3,11 @@ package io.tomcode.j4rent.core.entities;
 import io.tomcode.j4rent.mapper.PostCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

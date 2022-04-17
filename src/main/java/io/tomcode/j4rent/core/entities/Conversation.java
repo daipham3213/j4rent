@@ -1,10 +1,16 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +20,7 @@ import java.util.*;
 @Setter
 public class Conversation extends BaseEntity {
 
-    @OneToMany(mappedBy = "conversation",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
     private List<Message> messages = new ArrayList<>();
 
 //    @ManyToMany

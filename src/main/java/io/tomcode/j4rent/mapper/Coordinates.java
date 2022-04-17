@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Coordinates {
     double distance;
-    double  latitude;
+    double latitude;
     double longitude;
     int floorArea;
     int minPrice;

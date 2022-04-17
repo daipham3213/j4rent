@@ -3,14 +3,12 @@ package io.tomcode.j4rent.controller;
 
 import io.tomcode.j4rent.core.entities.Role;
 import io.tomcode.j4rent.core.services.IRoleService;
-import io.tomcode.j4rent.mapper.PostDetails;
 import io.tomcode.j4rent.mapper.ResponseResult;
 import io.tomcode.j4rent.mapper.RoleDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping(value = "/role")
 @CrossOrigin(origins = "${app.security.cors.origin}", allowedHeaders = "*")
-public class    RoleController {
+public class RoleController {
     private final IRoleService roleService;
 
     public RoleController(IRoleService roleService) {

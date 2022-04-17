@@ -18,11 +18,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ComponentScan(basePackages = {"io.tomcode.j4rent"})
 public class ApplicationConfig {
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 

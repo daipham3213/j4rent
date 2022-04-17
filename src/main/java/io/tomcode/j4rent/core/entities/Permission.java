@@ -16,21 +16,9 @@ import java.util.List;
 @Setter
 @Entity
 public class Permission extends BaseEntity {
+    @JsonManagedReference
+    @OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<RolePermissions> rolePermissions = new ArrayList<>();
     @Column(name = "name")
     private String name;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "Permission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<RolePermissions> rolePermissions = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "Permission", orphanRemoval = true,fetch = FetchType.LAZY)
-//    private List<RolePermissions> rolePermissions = new ArrayList<>();
-
-
-//    @ManyToMany
-//    @JoinTable(name = "role_permissions",
-//            joinColumns = @JoinColumn(name = "permission_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private List<Role> roles = new ArrayList<>();
-
 }

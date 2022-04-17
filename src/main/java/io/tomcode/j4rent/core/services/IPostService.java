@@ -7,9 +7,8 @@ import io.tomcode.j4rent.mapper.PostDetails;
 import io.tomcode.j4rent.mapper.PostUpdate;
 import io.tomcode.j4rent.mapper.PostView;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
-
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -20,17 +19,17 @@ public interface IPostService {
 
     Post getPostById(UUID id);
 
-    Page<PostDetails> getAllPost(Pageable page) ;
+    Page<PostDetails> getAllPost(Pageable page);
 
-    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max) ;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max);
 
-    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance) ;
+    Page<PostDetails> getAllPost(Pageable page, float floorArea, BigInteger min, BigInteger max, double latitude, double longitude, double distance);
 
     Page<PostDetails> getCreatedPosts(Pageable page) throws IdIsNotFoundException;
 
     Page<PostDetails> getCreatedPosts(Pageable page, float floorArea, BigInteger min, BigInteger max) throws IdIsNotFoundException;
 
-    PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException,  UserPostsNotFoundException;
+    PostDetails updatePost(PostUpdate post) throws FloorAreaIncorrectValue, PriceIncorrectValue, ImageFailException, UserPostsNotFoundException;
 
     void deletePost(UUID uuid) throws UserPostsNotFoundException, IdIsNotFoundException, PermissionIsNoFound, IdUserIsNotFoundException;
 }

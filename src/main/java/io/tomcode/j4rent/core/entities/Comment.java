@@ -1,6 +1,9 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -28,18 +31,18 @@ public class Comment extends BaseEntity {
     private Comment parentN;
 
     public Comment(Album album, String content) {
-        this.album=album;
-        this.contents=content;
+        this.album = album;
+        this.contents = content;
     }
 
     public Comment(Post post, String content) {
-        this.post=post;
-        this.contents=content;
+        this.post = post;
+        this.contents = content;
     }
 
     public Comment(Comment comment, String content) {
-        this.parentN=comment;
-        this.contents=content;
+        this.parentN = comment;
+        this.contents = content;
     }
 
 //    @ManyToOne

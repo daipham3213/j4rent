@@ -1,7 +1,5 @@
 package io.tomcode.j4rent.core.entities;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.tomcode.j4rent.core.entities.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -6,18 +6,21 @@ package io.tomcode.j4rent.controller;
 //import io.swagger.v3.oas.annotations.responses.ApiResponses;
 //import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 //import io.tomcode.j4rent.core.entities.Post;
+
 import io.tomcode.j4rent.core.services.IAccountService;
 import io.tomcode.j4rent.core.services.IPostService;
-import io.tomcode.j4rent.mapper.*;
+import io.tomcode.j4rent.mapper.PostCreate;
+import io.tomcode.j4rent.mapper.PostDetails;
+import io.tomcode.j4rent.mapper.PostUpdate;
+import io.tomcode.j4rent.mapper.ResponseResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import org.springframework.data.domain.Pageable;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -110,7 +113,7 @@ public class PostController {
     public ResponseEntity<ResponseResult> deletePost(@RequestBody UUID idPost) {
         try {
             postService.deletePost(idPost);
-            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Deleted post with ID: "+ idPost), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "Deleted post with ID: " + idPost), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

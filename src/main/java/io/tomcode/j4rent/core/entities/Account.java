@@ -1,17 +1,18 @@
 package io.tomcode.j4rent.core.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,16 +45,16 @@ public class Account extends BaseEntity implements UserDetails {
     @Column(name = "id_card", length = 15, unique = true)
     private String idCard;
 
-    @Column(name = "avatar",length = 100, unique = true)
+    @Column(name = "avatar", length = 100, unique = true)
     private String avatar;
 
     @Column(length = 10, columnDefinition = "VARCHAR(10) DEFAULT 'male'")
     private String gender;
 
-    @Column(name = "phone_number",length = 15, unique = true)
+    @Column(name = "phone_number", length = 15, unique = true)
     private String phoneNumber;
 
-    @Column(name = "email",length = 100, unique = true)
+    @Column(name = "email", length = 100, unique = true)
     private String email;
 
     @Column(name = "is_verify", columnDefinition = "BOOL DEFAULT false")
@@ -65,16 +66,16 @@ public class Account extends BaseEntity implements UserDetails {
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private  Role role;
+    private Role role;
 
 
-    @OneToMany(mappedBy = "createdById", orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdById", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Album> albums = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Workflow> workflows = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdById", orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "createdById", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
 
     @Override

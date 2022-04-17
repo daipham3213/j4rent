@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class CreateAccount {
 
-    private  int otp;
+    private int otp;
 
     private String password;
 

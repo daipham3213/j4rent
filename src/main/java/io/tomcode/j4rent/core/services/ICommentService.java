@@ -15,9 +15,9 @@ public interface ICommentService {
 
     CommentCreate createComment(CommentCreate commentCreate) throws IdIsNotFoundException;
 
-    Page<CommentCreate> getComments(Pageable page,UUID uuid) throws IdIsNotFoundException;
+    Page<CommentCreate> getComments(Pageable page, UUID uuid) throws IdIsNotFoundException;
 
-    CommentCreate updateComment (CommentCreate commentCreate) throws IdIsNotFoundException, CommentIsNotFoundException, IdUserIsNotFoundException;
+    CommentCreate updateComment(CommentCreate commentCreate) throws IdIsNotFoundException, CommentIsNotFoundException, IdUserIsNotFoundException;
 
     void deleteComment(UUID uuid) throws IdUserIsNotFoundException, CommentIsNotFoundException;
 }

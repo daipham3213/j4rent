@@ -3,7 +3,6 @@ package io.tomcode.j4rent.core.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.tomcode.j4rent.core.entities.Document;
-
 import io.tomcode.j4rent.mapper.DocumentCreate;
 import io.tomcode.j4rent.mapper.PostDetails;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,7 @@ public interface IDocumentService {
 
     Document getDocument(UUID documentId);
 
-    Page<PostDetails> getPostCreatedInDocument(Pageable pageable,UUID uuid);
+    Page<PostDetails> getPostCreatedInDocument(Pageable pageable, UUID uuid);
 
     void deleteOTPAndDocument(UUID uuid);
 

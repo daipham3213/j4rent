@@ -9,5 +9,6 @@ import java.util.Map;
 @Component
 public interface ICloudinaryService {
     Map upload(MultipartFile multipartFile) throws IOException;
+
     Map delete(String id) throws IOException;
 }

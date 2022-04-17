@@ -1,10 +1,12 @@
 package io.tomcode.j4rent.core.entities;
 
-import lombok.*;
-import org.springframework.data.jpa.domain.AbstractAuditable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Image")
@@ -20,16 +22,15 @@ public class Image extends BaseEntity {
     private String caption;
     @Column(name = "is_hidden")
     private Boolean isHidden;
-
-    public Image(String caption,String url) {
-        this.caption=caption;
-        this.url = url;
-    }
-
     //
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
+
+    public Image(String caption, String url) {
+        this.caption = caption;
+        this.url = url;
+    }
 
 
 }

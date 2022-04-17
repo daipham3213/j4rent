@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Register {
-     String username;
-     String email;
-     String phoneNumber;
+    String username;
+    String email;
+    String phoneNumber;
 }
