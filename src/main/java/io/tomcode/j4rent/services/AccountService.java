@@ -18,10 +18,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -164,7 +170,6 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
 
-
     @Override
     public UserInfo getCurrentUserInfo() {
         Account account = getCurrentAccount();
@@ -199,8 +204,18 @@ public class AccountService implements IAccountService, UserDetailsService {
     }
 
     @Override
-    public void logout() {
-        Authentication authentication = getAuthentication();
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws UserPostsNotFoundException, ServletException, IdUserIsNotFoundException {
+        Authentication auth = getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+    //            SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+    //            SecurityContextHolder.clearContext();
+    //            CookieClearingLogoutHandler cookieClearingLogoutHandler = new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY);
+    //            SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+    //            cookieClearingLogoutHandler.logout(request, response, null);
+    //            securityContextLogoutHandler.logout(request, response, null);
+
+        }else throw new IdUserIsNotFoundException();
     }
 
 

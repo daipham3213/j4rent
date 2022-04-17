@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 @RestController
 @RequestMapping("/account")
@@ -89,6 +92,16 @@ public class AccountController {
         try {
             return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", accountService.updateAvatar(file)), HttpStatus.OK);
 
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<ResponseResult> logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            accountService.logout(request,response);
+            return new ResponseEntity<>(new ResponseResult(HttpStatus.OK, "", "logout"), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

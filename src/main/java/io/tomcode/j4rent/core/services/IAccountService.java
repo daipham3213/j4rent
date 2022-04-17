@@ -9,6 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 
@@ -45,5 +48,5 @@ public interface IAccountService {
 
     boolean checkUserPermission (UUID uuid , String namePermission );
 
-    void logout();
+    void logout(HttpServletRequest request, HttpServletResponse response) throws UserPostsNotFoundException, ServletException, IdUserIsNotFoundException;
 }
