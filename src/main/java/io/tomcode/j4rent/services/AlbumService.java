@@ -33,7 +33,7 @@ public class AlbumService implements IAlbumService {
 
     @Override
     public Album createAlbum(AlbumCreate albumLoad) throws ImageFailException {
-        Album album = new Album(albumLoad.getName(), albumLoad.getIsHidden());
+        Album album = new Album(albumLoad.getName(), albumLoad.isHidden());
         for (ImageCreate image : albumLoad.getImages()) {
             album.getImages().add(imageService.upload(image));
         }

@@ -13,7 +13,8 @@ import java.util.List;
 public class AlbumCreate {
     String name;
 
-    Boolean isHidden;
+    boolean isHidden;
 
     List<ImageCreate> images;
+
 }
