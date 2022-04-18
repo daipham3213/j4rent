@@ -28,8 +28,6 @@ public class PostDetails {
 
     private float floorArea;
 
-    private String address;
-
     private String furnitureStatus;
 
     private Date createdAt;

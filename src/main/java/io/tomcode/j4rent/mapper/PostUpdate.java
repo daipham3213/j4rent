@@ -23,8 +23,6 @@ public class PostUpdate {
 
     private float floorArea;
 
-    private String address;
-
     private String furnitureStatus;
 
     private AlbumCreate album;

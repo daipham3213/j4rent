@@ -23,8 +23,6 @@ public class PostCreate {
 
     private float floorArea;
 
-    private String address;
-
     private String furnitureStatus;
 
     private AlbumCreate album;

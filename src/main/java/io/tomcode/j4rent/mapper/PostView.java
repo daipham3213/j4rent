@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class PostView {
+public class
+PostView {
     private String contents;
 
     private double latitude;
@@ -18,8 +19,6 @@ public class PostView {
     private double price;
 
     private float floorArea;
-
-    private String address;
 
     private String furnitureStatus;
 
