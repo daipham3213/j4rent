@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Comment extends BaseEntity {
 
     @Column(name = "contents")
-    private String contents;
+    private String  contents;
 
     @ManyToOne
     @JoinColumn(name = "album_id")

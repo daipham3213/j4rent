@@ -71,21 +71,20 @@ public class CommentService implements ICommentService {
         Post post = postService.getPostById(uuid);
         Comment comment = commentRepository.findCommentById(uuid);
         ArrayList<CommentCreate> results = new ArrayList<>();
-        List<Comment> list;
-        if (album != null || post != null || comment != null) {
-            if (album != null || comment != null) {
-                if (album != null) {
-                    list = commentRepository.findAllByAlbum(album);
-                } else if (post != null)
-                    list = commentRepository.findAllByPost(post);
-                else
-                    list = commentRepository.findAllByParentN(comment);
-                for (Comment cm : list
-                ) {
-                    results.add(modelMapper.map(cm, CommentCreate.class));
-                }
-                return new PageImpl<CommentCreate>(results, page, page.getPageSize());
-            } else throw new IdIsNotFoundException();
+        List<Comment> list=null;
+        if (album == null && post == null && comment == null) throw new IdIsNotFoundException();
+        if (album != null)
+            list = commentRepository.findAllByAlbum(album);
+        if (post != null)
+            list = commentRepository.findAllByPost(post);
+        if (comment != null)
+            list = commentRepository.findAllByParentN(comment);
+        if (list!=null) {
+            for (Comment cm : list
+            ) {
+                results.add(modelMapper.map(cm, CommentCreate.class));
+            }
+            return new PageImpl<CommentCreate>(results, page, page.getPageSize());
         }
         return null;
     }
