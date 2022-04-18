@@ -57,7 +57,6 @@ public class Post extends BaseEntity implements Serializable {
     private List<Comment> comments = new ArrayList<>();
 
     public Post(PostDetails postDetails) {
-        setId(postDetails.getId());
         this.contents = postDetails.getContents();
         this.latitude = postDetails.getLatitude();
         this.longitude = postDetails.getLongitude();
