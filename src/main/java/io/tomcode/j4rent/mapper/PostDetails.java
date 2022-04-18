@@ -14,8 +14,6 @@ import java.util.UUID;
 
 public class PostDetails {
 
-    private UUID id;
-
     private UUID documentId;
 
     private String contents;

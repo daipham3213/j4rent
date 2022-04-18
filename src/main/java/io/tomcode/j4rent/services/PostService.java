@@ -52,7 +52,10 @@ public class PostService implements IPostService {
         Account account = accountService.getCurrentAccount();
         if (account == null) throw new UserPostsNotFoundException();
         if (roleService.checkRolePermission(account.getId(), "create")) throw new PermissionIsNoFound();
-        Album album = albumService.createAlbum(postCreate.getAlbum());
+        AlbumCreate albumCreate = postCreate.getAlbum();
+        albumCreate.setName(account.getId()+"");
+        albumCreate.setHidden(false);
+        Album album = albumService.createAlbum(albumCreate);
         Post post = new Post(postCreate);
         post.setAlbum(album);
         post.setCreatedById(account.getId());
